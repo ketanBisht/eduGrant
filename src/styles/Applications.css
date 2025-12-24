@@ -1,0 +1,118 @@
+/* Applications Page */
+.app-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.app-header {
+    margin-bottom: 2rem;
+}
+
+.app-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.5rem;
+}
+
+.app-header p {
+    color: var(--text-muted);
+}
+
+.app-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.app-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+}
+
+.app-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--border);
+}
+
+.app-details {
+    flex: 1;
+}
+
+.app-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.app-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-main);
+}
+
+.status-badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.25rem 0.5rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.status-badge.approved {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+}
+
+.status-badge.rejected {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+}
+
+.status-badge.pending {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.app-meta {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+}
+
+.app-amount-box {
+    text-align: right;
+    margin-right: 1.5rem;
+}
+
+.app-amount {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.app-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.app-link {
+    color: var(--text-muted);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+}
+
+.app-link:hover {
+    background-color: var(--background);
+    color: var(--primary);
+}
