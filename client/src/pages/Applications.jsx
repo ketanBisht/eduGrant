@@ -8,25 +8,25 @@ export default function Applications() {
             id: 1,
             scholarship: 'Global Excellence Scholarship',
             provider: 'World Education Foundation',
-            date: 'Oct 15, 2024',
+            date: 'Feb 7, 2026',
             status: 'Pending',
-            amount: '$10,000'
+            amount: '₹10,000'
         },
         {
             id: 2,
             scholarship: 'STEM Future Leaders',
             provider: 'Tech Innovations Corp',
-            date: 'Oct 10, 2024',
+            date: 'Feb 10, 2026',
             status: 'Approved',
-            amount: '$5,000'
+            amount: '₹5,000'
         },
         {
             id: 3,
             scholarship: 'Local Arts Grant',
             provider: 'City Council',
-            date: 'Sep 28, 2024',
+            date: 'Feb 12, 2026',
             status: 'Rejected',
-            amount: '$1,000'
+            amount: '₹1,000'
         }
     ];
 

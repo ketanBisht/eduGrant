@@ -6,7 +6,7 @@ import '../styles/Layout.css';
 export default function DashboardLayout() {
     return (
         <div className="dashboard-layout">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="main-content">
                 <Navbar />
                 <main className="page-container">
@@ -16,3 +16,5 @@ export default function DashboardLayout() {
         </div>
     );
 }
+
+

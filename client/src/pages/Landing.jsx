@@ -15,6 +15,8 @@ export default function Landing() {
           </div>
         </div>
         <div className="navbar-end">
+          <Link to="/scholarships">Scholarships</Link>
+          <Link to="/dashboard">My Dashboard</Link>
           {/* <Link to="/login" className="btn text-slate-600 hover:text-primary font-medium">
             Log In
           </Link>

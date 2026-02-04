@@ -25,8 +25,10 @@ export default function Navbar() {
         <div className="user-profile">
           <div className="avatar">{user?.name?.charAt(0) || "U"}</div>
           <div className="user-info hidden sm:flex">
-            <span className="user-name">{user?.name || "Guest"}</span>
-            <span className="user-role">{user?.role || "Visitor"}</span>
+            {/* <span className="user-name">{user?.name || "Guest"}</span>
+            <span className="user-role">{user?.role || "Visitor"}</span> */}
+            <span className="user-name">{user?.fullName || "User"}</span>
+            <span className="user-role">{user?.publicMetadata?.role || "Student"}</span>
           </div>
         </div>
       </div>

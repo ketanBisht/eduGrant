@@ -3,10 +3,10 @@ import '../styles/Admin.css';
 
 export default function AdminPanel() {
     const scholarships = [
-        { id: 1, title: 'Global Future Leaders', applicants: 142, amount: '$10,000', status: 'active', deadline: 'Oct 30' },
-        { id: 2, title: 'Women in STEM Grant', applicants: 89, amount: '$5,000', status: 'active', deadline: 'Nov 15' },
-        { id: 3, title: 'Community Service Award', applicants: 34, amount: '$2,500', status: 'draft', deadline: 'Dec 01' },
-        { id: 4, title: 'Arts & Design Fellowship', applicants: 56, amount: '$7,500', status: 'active', deadline: 'Nov 05' },
+        { id: 1, title: 'Global Future Leaders', applicants: 142, amount: '₹10,000', status: 'active', deadline: 'Feb 7' },
+        { id: 2, title: 'Women in STEM Grant', applicants: 89, amount: '₹5,000', status: 'active', deadline: 'Feb 10' },
+        { id: 3, title: 'Community Service Award', applicants: 34, amount: '₹2,500', status: 'draft', deadline: 'Feb 15' },
+        { id: 4, title: 'Arts & Design Fellowship', applicants: 56, amount: '₹7,500', status: 'active', deadline: 'March 1' },
     ];
 
     const handleDelete = (id) => {

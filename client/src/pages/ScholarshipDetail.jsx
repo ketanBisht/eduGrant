@@ -3,7 +3,7 @@ import { ArrowLeft, Building2, Clock, CheckCircle, AlertCircle, Share2, Bookmark
 import '../styles/Scholarships.css';
 import '../styles/ScholarshipDetail.css';
 
-export default function ScholarshipDetail() {
+export default function  ScholarshipDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -12,18 +12,17 @@ export default function ScholarshipDetail() {
         id: id,
         title: 'Global Future Leaders Scholarship',
         provider: 'World Education Foundation',
-        amount: '$10,000',
-        deadline: 'Oct 30, 2024',
+        amount: '₹10,000',
+        deadline: 'Feb 7, 2026',
         description: 'The Global Future Leaders Scholarship is designed to support outstanding students who demonstrate exceptional leadership potential and academic excellence. This prestigious award aims to foster the next generation of global changemakers.',
         eligibility: [
             'Must be enrolled in an accredited university',
-            'Minimum GPA of 3.5/4.0',
+            'Minimum GPA of 8.5/10',
             'Demonstrated leadership experience',
             'Strong letter of recommendation',
-            'Citizenship of any country (International students welcome)'
         ],
         benefits: [
-            'Full tuition coverage up to $10,000',
+            'Full tuition coverage up to ₹10,000',
             'Mentorship from industry leaders',
             'Networking opportunities at annual summit',
             'Internship placement assistance'

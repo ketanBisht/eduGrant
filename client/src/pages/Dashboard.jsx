@@ -17,15 +17,15 @@ export default function Dashboard() {
   ];
 
   const recommended = [
-    { id: 1, title: "Global Excellence Scholarship", amount: "$5,000", deadline: "2 days left" },
-    { id: 2, title: "STEM Future Leaders", amount: "$10,000", deadline: "5 days left" },
-    { id: 3, title: "Merit Access Grant", amount: "$2,500", deadline: "1 week left" },
+    { id: 1, title: "Global Excellence Scholarship", amount: "₹5,000", deadline: "2 days left" },
+    { id: 2, title: "STEM Future Leaders", amount: "₹10,000", deadline: "5 days left" },
+    { id: 3, title: "Merit Access Grant", amount: "₹2,500", deadline: "1 week left" },
   ];
 
   const upcomingDeadlines = [
-    { id: 1, title: "Global Excellence", date: "Oct 25" },
-    { id: 4, title: "Arts & Culture Fund", date: "Oct 28" },
-    { id: 5, title: "Research Grant 2024", date: "Nov 01" },
+    { id: 1, title: "Global Excellence", date: "Feb 7" },
+    { id: 4, title: "Arts & Culture Fund", date: "Feb 10" },
+    { id: 5, title: "Research Grant 2024", date: "Feb 12" },
   ];
 
   return (

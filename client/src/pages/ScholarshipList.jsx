@@ -13,8 +13,8 @@ export default function ScholarshipList() {
             id: 1,
             title: 'Global Future Leaders Scholarship',
             provider: 'World Education Foundation',
-            amount: '$10,000',
-            deadline: 'Oct 30, 2024',
+            amount: '₹10,000',
+            deadline: 'Feb 7, 2026',
             categories: ['Merit-based', 'International'],
             isNew: true
         },
@@ -22,8 +22,8 @@ export default function ScholarshipList() {
             id: 2,
             title: 'Women in STEM Grant',
             provider: 'Tech Innovations Corp',
-            amount: '$5,000',
-            deadline: 'Nov 15, 2024',
+            amount: '₹5,000',
+            deadline: 'Feb 10, 2026',
             categories: ['Engineering', 'Women only'],
             isNew: false
         },
@@ -31,8 +31,8 @@ export default function ScholarshipList() {
             id: 3,
             title: 'Community Service Award',
             provider: 'Local Rotary Club',
-            amount: '$2,500',
-            deadline: 'Dec 01, 2024',
+            amount: '₹2,500',
+            deadline: 'Feb 12, 2026',
             categories: ['Community', 'Need-based'],
             isNew: false
         },
@@ -40,8 +40,8 @@ export default function ScholarshipList() {
             id: 4,
             title: 'Arts & Design Fellowship',
             provider: 'Creative Arts Alliance',
-            amount: '$7,500',
-            deadline: 'Nov 05, 2024',
+            amount: '₹7,500',
+            deadline: 'Feb 15, 2026',
             categories: ['Arts', 'Portfolio needed'],
             isNew: true
         },
@@ -49,8 +49,8 @@ export default function ScholarshipList() {
             id: 5,
             title: ' Undergraduate Access Fund',
             provider: 'EduGrant Official',
-            amount: '$3,000',
-            deadline: 'Dec 15, 2024',
+            amount: '₹3,000',
+            deadline: 'Feb 28, 2026',
             categories: ['Undergraduate', 'Need-based'],
             isNew: false
         },
@@ -58,8 +58,8 @@ export default function ScholarshipList() {
             id: 6,
             title: 'Postgrad Research Stipend',
             provider: 'National Research Council',
-            amount: '$15,000',
-            deadline: 'Jan 10, 2025',
+            amount: '₹15,000',
+            deadline: 'March 10, 2026',
             categories: ['Research', 'PhD'],
             isNew: false
         }
