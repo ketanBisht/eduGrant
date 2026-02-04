@@ -19,13 +19,18 @@ function App() {
       <Route path="/" element={<Landing />} />
 
       {/* Clerk Auth */}
+      {/* Register Route */}
+      <Route
+        path="/register/*"
+        element={<SignUp path="/register" routing="path" signInUrl="/login" fallbackRedirectUrl="/" />}
+      />
+      {/* Login Route */}
       <Route
         path="/login/*"
         element={<SignIn path="/login" routing="path" signUpUrl="/register" fallbackRedirectUrl="/" />}
       />
       {/* <Route path="/login/*" element={<SignIn routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
-
-      <Route path="/register/*" element={<SignUp routing="path" fallbackRedirectUrl="/dashboard" />} />
+      {/* <Route path="/register/*" element={<SignUp routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
 
       {/* Protected */}
       <Route

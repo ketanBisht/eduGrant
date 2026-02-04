@@ -1,11 +1,12 @@
-import { useAuth } from "../context/AuthContext";
 import { Bell } from "lucide-react";
 import "../styles/Layout.css";
-import { useUser, useClerk } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function Navbar() {
   // const { user } = useAuth();
   const { user, isLoaded } = useUser();
+
+  if (!isLoaded) return null;
 
   return (
     <header className="navbar">
