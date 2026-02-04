@@ -1,66 +1,36 @@
-import { NavLink } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import {
-    LayoutDashboard,
-    GraduationCap,
-    FileText,
-    Settings,
-    LogOut,
-    Shield
-} from 'lucide-react';
-import '../styles/Layout.css';
+import { Bell } from "lucide-react";
+import { useUser } from "@clerk/clerk-react";
+import "../styles/Layout.css";
 
-export default function Sidebar() {
-    const { user, logout } = useAuth();
-    const isAdmin = user?.role === 'admin';
+export default function Navbar() {
+  const { user, isLoaded } = useUser();
 
-    return (
-        <aside className="sidebar">
-            <div className="sidebar-header">
-                <div className="brand">
-                    <GraduationCap size={28} />
-                    EduGrant
-                </div>
-            </div>
+  if (!isLoaded) return null;
 
-            <nav className="sidebar-nav">
-                {isAdmin ? (
-                    /* Admin Links */
-                    <>
-                        <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <Shield size={20} />
-                            Admin Panel
-                        </NavLink>
-                        <NavLink to="/scholarships" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <FileText size={20} />
-                            Manage Scholarships
-                        </NavLink>
-                    </>
-                ) : (
-                    /* Student Links */
-                    <>
-                        <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <LayoutDashboard size={20} />
-                            Dashboard
-                        </NavLink>
-                        <NavLink to="/scholarships" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <GraduationCap size={20} />
-                            Scholarships
-                        </NavLink>
-                        <NavLink to="/applications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <FileText size={20} />
-                            My Applications
-                        </NavLink>
-                    </>
-                )}
-            </nav>
+  return (
+    <header className="navbar">
+      <div className="navbar-start">
+        {/* Breadcrumb or Page Title */}
+        <h1>Overview</h1>
+      </div>
 
-            <div className="sidebar-footer">
-                <button onClick={logout} className="nav-item w-full text-red-500 hover:text-red-600">
-                    <LogOut size={20} />
-                    Sign Out
-                </button>
-            </div>
-        </aside>
-    );
+      <div className="navbar-end">
+        {/* Notifications */}
+        <button className="p-2 text-slate-400 hover:text-slate-600 transition-colors relative">
+          <Bell size={20} />
+          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
+        </button>
+
+        {/* User Profile */}
+        <div className="user-profile">
+          <div className="avatar">{user?.firstName?.charAt(0) || "U"}</div>
+
+          <div className="user-info hidden sm:flex">
+            <span className="user-name">{user?.fullName || "User"}</span>
+            <span className="user-role">{user?.publicMetadata?.role || "Student"}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+  );
 }
