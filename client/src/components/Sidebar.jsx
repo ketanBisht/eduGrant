@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+// import { useAuth } from '../context/AuthContext';
 import {
     LayoutDashboard,
     GraduationCap,
@@ -9,9 +9,11 @@ import {
     Shield
 } from 'lucide-react';
 import '../styles/Layout.css';
+import { useUser } from "@clerk/clerk-react";
+
 
 export default function Sidebar() {
-    const { user, logout } = useAuth();
+    const { user, logout } = useUser();
     const isAdmin = user?.role === 'admin';
 
     return (
