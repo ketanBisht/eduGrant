@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
   {
+    clerkId: {
+      type: String,
+      required: true,
+      unique: true
+    },
     name: {
       type: String,
       required: true,
@@ -13,18 +18,20 @@ const studentSchema = new mongoose.Schema(
       unique: true,
       lowercase: true
     },
-    course: {
+    role: {
       type: String,
-      required: true
+      enum: ["student", "admin"],
+      default: "student"
+    },
+    course: {
+      type: String
     },
     income: {
-      type: Number,
-      required: true
+      type: Number
     },
     category: {
       type: String,
-      enum: ["General", "OBC", "SC", "ST"],
-      required: true
+      enum: ["General", "OBC", "SC", "ST"]
     },
     profile_status: {
       type: String,

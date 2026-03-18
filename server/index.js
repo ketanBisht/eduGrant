@@ -11,6 +11,7 @@ import {
 } from "@clerk/express";
 import connectDB from "./config/db.js";
 import scholarshipRoutes from "./routes/scholarshipRoutes.js";
+import applicationRoutes from "./routes/applicationRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ connectDB();
 
 // Register specialized routes
 app.use("/api/scholarships", scholarshipRoutes);
+app.use("/api/applications", applicationRoutes);
 
 // Public route
 app.get("/", (req, res) => {
