@@ -3,6 +3,7 @@ import { SignIn, SignUp } from "@clerk/clerk-react";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./components/DashboardLayout";
+import { Toaster } from "react-hot-toast";
 
 // Pages
 import Landing from "./pages/Landing";
@@ -14,8 +15,10 @@ import AdminPanel from "./pages/AdminPanel";
 
 function App() {
   return (
-    <Routes>
-      {/* Public */}
+    <>
+      <Toaster position="top-center" />
+      <Routes>
+        {/* Public */}
       <Route path="/" element={<Landing />} />
 
       {/* Clerk Auth */}
@@ -47,6 +50,7 @@ function App() {
         <Route path="/admin" element={<AdminPanel />} />
       </Route>
     </Routes>
+    </>
   );
 }
 
