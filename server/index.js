@@ -47,7 +47,6 @@ app.get("/protected", requireAuth(), async (req, res) => {
 
 /* -------------------- SERVER -------------------- */
 app.listen(PORT, () => {
-  console.log("URI CHECK →", process.env.MONGO_URI);
 
   console.log(`Server running at http://localhost:${PORT}`);
 });
