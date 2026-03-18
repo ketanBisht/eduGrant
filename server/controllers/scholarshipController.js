@@ -1,4 +1,5 @@
 import Scholarship from "../models/Scholarship.js";
+import { getAllScholarships as fetchScholarshipsFromService } from "../services/scholarshipService.js";
 
 // @desc    Get all scholarships (with search, filter, pagination)
 // @route   GET /api/scholarships
@@ -7,48 +8,47 @@ export const getAllScholarships = async (req, res) => {
   try {
     const { keyword, type, amount, page = 1, limit = 10 } = req.query;
 
-    const query = {};
+    let scholarships = await fetchScholarshipsFromService();
 
     // Search by keyword in title or provider
     if (keyword) {
-      query.$or = [
-        { title: { $regex: keyword, $options: "i" } },
-        { provider: { $regex: keyword, $options: "i" } }
-      ];
+      const lowerKeyword = keyword.toLowerCase();
+      scholarships = scholarships.filter(s => 
+        s.title?.toLowerCase().includes(lowerKeyword) || 
+        s.source?.toLowerCase().includes(lowerKeyword)
+      );
     }
 
-    // Filter by type (searching in eligibility_criteria since schema lacks 'type' field)
+    // Filter by type (searching in eligibility)
     if (type) {
-      query.eligibility_criteria = { $regex: type, $options: "i" };
+      const lowerType = type.toLowerCase();
+      scholarships = scholarships.filter(s => 
+        s.eligibility?.toLowerCase().includes(lowerType)
+      );
     }
 
-    // Filter by amount
-    if (amount) {
-      // Assuming exact amount filter, or could parse as a minimum amount e.g. amount >= value
-      query.amount = { $gte: Number(amount) };
-    }
+    const total = scholarships.length;
 
     // Pagination basics
     const pageNumber = parseInt(page, 10);
     const limitNumber = parseInt(limit, 10);
     const startIndex = (pageNumber - 1) * limitNumber;
 
-    const total = await Scholarship.countDocuments(query);
-    const scholarships = await Scholarship.find(query)
-      .sort({ createdAt: -1 })
-      .skip(startIndex)
-      .limit(limitNumber);
+    // Sort by scrapedAt descending
+    scholarships.sort((a, b) => new Date(b.scrapedAt) - new Date(a.scrapedAt));
+
+    const paginatedScholarships = scholarships.slice(startIndex, startIndex + limitNumber);
 
     res.status(200).json({
       success: true,
-      count: scholarships.length,
+      count: paginatedScholarships.length,
       pagination: {
         total,
         page: pageNumber,
         pages: Math.ceil(total / limitNumber),
         limit: limitNumber
       },
-      data: scholarships
+      data: paginatedScholarships
     });
   } catch (error) {
     res.status(500).json({ success: false, message: "Server Error", error: error.message });
