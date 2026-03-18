@@ -97,8 +97,8 @@ export default function ScholarshipList() {
                         <p>{error}</p>
                     </div>
                 ) : (
-                    filteredScholarships.map(scholarship => (
-                        <ScholarshipCard key={scholarship._id} scholarship={scholarship} />
+                    filteredScholarships.map((scholarship, index) => (
+                        <ScholarshipCard key={scholarship._id || scholarship.title + index} scholarship={scholarship} />
                     ))
                 )}
             </div>
