@@ -1,47 +1,47 @@
-import { CheckCircle, Clock, XCircle, ChevronRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@clerk/clerk-react';
+import axios from 'axios';
+import { CheckCircle, Clock, XCircle, ChevronRight, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../styles/Applications.css';
 
 export default function Applications() {
-    const applications = [
-        {
-            id: 1,
-            scholarship: 'Global Excellence Scholarship',
-            provider: 'World Education Foundation',
-            date: 'Feb 7, 2026',
-            status: 'Pending',
-            amount: '₹10,000'
-        },
-        {
-            id: 2,
-            scholarship: 'STEM Future Leaders',
-            provider: 'Tech Innovations Corp',
-            date: 'Feb 10, 2026',
-            status: 'Approved',
-            amount: '₹5,000'
-        },
-        {
-            id: 3,
-            scholarship: 'Local Arts Grant',
-            provider: 'City Council',
-            date: 'Feb 12, 2026',
-            status: 'Rejected',
-            amount: '₹1,000'
-        }
-    ];
+    const { getToken } = useAuth();
+    const [applications, setApplications] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchApplications = async () => {
+            try {
+                const token = await getToken();
+                const res = await axios.get('http://localhost:3000/api/applications/user', {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setApplications(res.data.data);
+            } catch (err) {
+                console.error(err);
+                setError('Failed to load applications.');
+            } finally {
+                setLoading(false);
+            }
+        };
+        
+        fetchApplications();
+    }, [getToken]);
 
     const getStatusClass = (status) => {
         switch (status) {
-            case 'Approved': return 'approved';
-            case 'Rejected': return 'rejected';
+            case 'approved': return 'approved';
+            case 'rejected': return 'rejected';
             default: return 'pending';
         }
     };
 
     const getStatusIcon = (status) => {
         switch (status) {
-            case 'Approved': return <CheckCircle size={14} />;
-            case 'Rejected': return <XCircle size={14} />;
+            case 'approved': return <CheckCircle size={14} />;
+            case 'rejected': return <XCircle size={14} />;
             default: return <Clock size={14} />;
         }
     };
@@ -54,32 +54,36 @@ export default function Applications() {
             </div>
 
             <div className="app-list">
-                {applications.map(app => (
-                    <div key={app.id} className="app-card">
+                {loading ? (
+                    <div className="flex justify-center p-12"><Loader2 className="animate-spin text-primary" size={32} /></div>
+                ) : error ? (
+                    <div className="text-center p-12 text-red-500">{error}</div>
+                ) : applications.map(app => (
+                    <div key={app._id} className="app-card">
                         <div className="app-details">
                             <div className="app-title-row">
-                                <h3 className="app-title">{app.scholarship}</h3>
-                                <span className={`status-badge ${getStatusClass(app.status)}`}>
-                                    {getStatusIcon(app.status)}
-                                    {app.status}
+                                <h3 className="app-title">{app.scholarship?.title || 'Unknown Scholarship'}</h3>
+                                <span className={`status-badge ${getStatusClass(app.application_status)}`} style={{ textTransform: 'capitalize' }}>
+                                    {getStatusIcon(app.application_status)}
+                                    {app.application_status}
                                 </span>
                             </div>
-                            <p className="app-meta">{app.provider} • Applied on {app.date}</p>
+                            <p className="app-meta">{app.scholarship?.provider} • Applied on {new Date(app.applied_date).toLocaleDateString()}</p>
                         </div>
 
                         <div className="app-amount-box">
-                            <div className="app-amount">{app.amount}</div>
+                            <div className="app-amount">₹{app.scholarship?.amount?.toLocaleString() || 0}</div>
                             <div className="app-label">Amount</div>
                         </div>
 
-                        <Link to={`/scholarships/${app.id}`} className="app-link">
+                        <Link to={`/scholarships/${app.scholarship?._id}`} className="app-link">
                             <ChevronRight size={20} />
                         </Link>
                     </div>
                 ))}
             </div>
 
-            {applications.length === 0 && (
+            {!loading && !error && applications.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                     <p>You haven't applied to any scholarships yet.</p>
                     <Link to="/scholarships" style={{ color: 'var(--primary)', fontWeight: 500, marginTop: '0.5rem', display: 'inline-block' }}>
