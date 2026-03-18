@@ -119,8 +119,8 @@
 }
 
 .scholarship-item:hover {
-    border-color: var(--border);
-    background-color: #f1f5f9;
+    border-color: var(--primary);
+    background-color: var(--surface-muted);
 }
 
 .item-info h4 {

@@ -1,68 +1,61 @@
-import { NavLink } from 'react-router-dom';
-// import { useAuth } from '../context/AuthContext';
-import {
-    LayoutDashboard,
-    GraduationCap,
-    FileText,
-    Settings,
-    LogOut,
-    Shield
-} from 'lucide-react';
-import '../styles/Layout.css';
-import { useUser } from "@clerk/clerk-react";
-
+import { LayoutDashboard, GraduationCap, FileText, Settings, LogOut, ShieldCheck } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { useUser, useClerk } from "@clerk/clerk-react";
+import "../styles/Layout.css";
 
 export default function Sidebar() {
-    const { user, logout } = useUser();
-    const isAdmin = user?.role === 'admin';
+  const { user } = useUser();
+  const { signOut } = useClerk();
+  const location = useLocation();
 
-    return (
-        <aside className="sidebar">
-            <div className="sidebar-header">
-                <div className="brand">
-                    <GraduationCap size={28} />
-                    EduGrant
-                </div>
-            </div>
+  const navItems = [
+    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { label: "Scholarships", path: "/scholarships", icon: GraduationCap },
+    { label: "My Applications", path: "/applications", icon: FileText },
+  ];
 
-            <nav className="sidebar-nav">
-                {isAdmin ? (
-                    /* Admin Links */
-                    <>
-                        <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <Shield size={20} />
-                            Admin Panel
-                        </NavLink>
-                        <NavLink to="/scholarships" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <FileText size={20} />
-                            Manage Scholarships
-                        </NavLink>
-                    </>
-                ) : (
-                    /* Student Links */
-                    <>
-                        <NavLink to="/dashboard" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <LayoutDashboard size={20} />
-                            Dashboard
-                        </NavLink>
-                        <NavLink to="/scholarships" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <GraduationCap size={20} />
-                            Scholarships
-                        </NavLink>
-                        <NavLink to="/applications" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-                            <FileText size={20} />
-                            My Applications
-                        </NavLink>
-                    </>
-                )}
-            </nav>
+  // Admin access
+  if (user?.publicMetadata?.role === "admin") {
+    navItems.push({ label: "Admin Panel", path: "/admin", icon: ShieldCheck });
+  }
 
-            <div className="sidebar-footer">
-                <button onClick={logout} className="nav-item w-full text-red-500 hover:text-red-600">
-                    <LogOut size={20} />
-                    Sign Out
-                </button>
-            </div>
-        </aside>
-    );
+  return (
+    <aside className="sidebar">
+      <div className="sidebar-header">
+        <div className="brand">
+          <GraduationCap className="w-8 h-8 text-primary" />
+          <span>EduGrant</span>
+        </div>
+      </div>
+
+      <nav className="sidebar-nav">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`nav-item ${isActive ? "active" : ""}`}
+            >
+              <Icon size={20} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="sidebar-footer">
+        <Link to="/settings" className="nav-item">
+          <Settings size={20} />
+          <span>Settings</span>
+        </Link>
+        <button onClick={() => signOut()} className="nav-item w-full text-left">
+          <LogOut size={20} />
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+  );
 }
+

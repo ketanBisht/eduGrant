@@ -1,10 +1,12 @@
-import { Bell } from "lucide-react";
+import { Bell, Moon, Sun } from "lucide-react";
 import "../styles/Layout.css";
-import { useUser } from "@clerk/clerk-react";
+import { useUser, UserButton } from "@clerk/clerk-react";
+import { dark } from "@clerk/themes";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Navbar() {
-  // const { user } = useAuth();
   const { user, isLoaded } = useUser();
+  const { theme, toggleTheme } = useTheme();
 
   if (!isLoaded) return null;
 
@@ -16,17 +18,27 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end">
-        <button className="p-2 text-slate-400 hover:text-slate-600 transition-colors relative">
+        <button 
+          onClick={toggleTheme}
+          className="p-2 transition-colors nav-icon-btn"
+          title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+        >
+          {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+        </button>
+
+        <button className="p-2 transition-colors relative nav-icon-btn">
           <Bell size={20} />
           {/* Notification dot */}
           <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
         </button>
 
         <div className="user-profile">
-          <div className="avatar">{user?.name?.charAt(0) || "U"}</div>
+          <UserButton 
+            appearance={{
+              baseTheme: theme === 'dark' ? dark : undefined,
+            }}
+          />
           <div className="user-info hidden sm:flex">
-            {/* <span className="user-name">{user?.name || "Guest"}</span>
-            <span className="user-role">{user?.role || "Visitor"}</span> */}
             <span className="user-name">{user?.fullName || "User"}</span>
             <span className="user-role">{user?.publicMetadata?.role || "Student"}</span>
           </div>

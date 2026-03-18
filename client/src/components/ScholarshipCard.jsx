@@ -1,11 +1,19 @@
 import { Link } from 'react-router-dom';
 import { Clock, Bookmark, Building2, ChevronRight, ExternalLink } from 'lucide-react';
+import toast from 'react-hot-toast';
 import '../styles/Scholarships.css';
 
 export default function ScholarshipCard({ scholarship }) {
     // Check if it's the old schema or new scraped schema
-    const title = scholarship.title || 'Untitled';
-    const provider = scholarship.provider || scholarship.source || 'Unknown Provider';
+    // Clean title and provider
+    const rawTitle = scholarship.title || 'Untitled';
+    const title = rawTitle.replace(/BUDDY4STUDY\s*:?\s*/gi, '').trim();
+    
+    let provider = scholarship.provider || scholarship.source || 'Scholarship Provider';
+    if (provider.toLowerCase() === 'buddy4study') {
+        provider = 'EduGrant Partner';
+    }
+    
     const amountOrDesc = scholarship.amount || scholarship.description || '';
     const deadline = scholarship.deadline || 'Varies';
     const categories = scholarship.categories || (scholarship.eligibility ? [scholarship.eligibility] : []);
@@ -13,6 +21,10 @@ export default function ScholarshipCard({ scholarship }) {
     
     // For Buddy4Study links, they might be relative. Make them absolute.
     const externalLink = scholarship.link ? (scholarship.link.startsWith('http') ? scholarship.link : `https://www.buddy4study.com${scholarship.link.startsWith('/') ? '' : '/'}${scholarship.link}`) : null;
+
+    const handleApply = () => {
+        toast.success(`Redirecting to application for: ${title}`);
+    };
 
     return (
         <div className="scholarship-card">
@@ -45,11 +57,17 @@ export default function ScholarshipCard({ scholarship }) {
             </div>
 
             <div className="card-footer">
-                <button className="save-btn" title="Save Scholarship">
+                <button className="save-btn" title="Save Scholarship" onClick={() => toast.success('Scholarship saved to your list!')}>
                     <Bookmark size={18} />
                 </button>
                 {externalLink ? (
-                    <a href={externalLink} target="_blank" rel="noopener noreferrer" className="btn btn-primary apply-btn">
+                    <a 
+                        href={externalLink} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="btn btn-primary apply-btn"
+                        onClick={handleApply}
+                    >
                         Apply Now <ExternalLink size={16} />
                     </a>
                 ) : (

@@ -1,8 +1,9 @@
 import { SignUp } from "@clerk/clerk-react";
+import "../styles/Auth.css";
 
 export default function Register() {
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div className="auth-container">
       <SignUp
         path="/register"
         routing="path"

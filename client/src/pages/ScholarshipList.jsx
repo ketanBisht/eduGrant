@@ -49,7 +49,7 @@ export default function ScholarshipList() {
                     <Search className="search-icon" size={18} />
                     <input
                         type="text"
-                        placeholder="Search by name, provider, or keyword..."
+                        placeholder="Search scholarships, eligibility, or keywords..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="search-input"
@@ -96,8 +96,10 @@ export default function ScholarshipList() {
             </div>
 
             {!loading && !error && filteredScholarships.length === 0 && (
-                <div className="text-center py-12 text-slate-500">
-                    <p>No scholarships found matching your criteria.</p>
+                <div className="empty-state">
+                    <div className="empty-icon">🔎</div>
+                    <h3>No scholarships found</h3>
+                    <p>Try adjusting your search terms or filters to find match.</p>
                 </div>
             )}
         </div>

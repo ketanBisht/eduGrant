@@ -1,17 +1,32 @@
 import { SignIn } from "@clerk/clerk-react";
+import "../styles/Auth.css";
 
 export default function Login() {
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
-      <SignIn
-        path="/login"
-        routing="path"
-        signUpUrl="/register"
-        fallbackRedirectUrl="/"
-      />
+    <div className="auth-container ">
+      <div className="auth-box">
+        <SignIn
+          path="/login"
+          routing="path"
+          signUpUrl="/register"
+          fallbackRedirectUrl="/"
+        />
+      </div>
     </div>
   );
 }
+// export default function Login() {
+//   return (
+//     <div className="auth-container">
+//       <SignIn
+//         path="/login"
+//         routing="path"
+//         signUpUrl="/register"
+//         fallbackRedirectUrl="/"
+//       />
+//     </div>
+//   );
+// }
 
 
 

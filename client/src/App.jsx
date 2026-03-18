@@ -12,6 +12,8 @@ import ScholarshipList from "./pages/ScholarshipList";
 import ScholarshipDetail from "./pages/ScholarshipDetail";
 import Applications from "./pages/Applications";
 import AdminPanel from "./pages/AdminPanel";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -25,13 +27,18 @@ function App() {
       {/* Register Route */}
       <Route
         path="/register/*"
-        element={<SignUp path="/register" routing="path" signInUrl="/login" fallbackRedirectUrl="/" />}
+        element={<Register />}
+        // element={<SignUp path="/register" routing="path" signInUrl="/login" fallbackRedirectUrl="/" />}
       />
       {/* Login Route */}
       <Route
         path="/login/*"
-        element={<SignIn path="/login" routing="path" signUpUrl="/register" fallbackRedirectUrl="/" />}
+        element={<Login />}
       />
+      {/* <Route
+        path="/login/*"
+        element={<SignIn path="/login" routing="path" signUpUrl="/register" fallbackRedirectUrl="/" />}
+      /> */}
       {/* <Route path="/login/*" element={<SignIn routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
       {/* <Route path="/register/*" element={<SignUp routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
 

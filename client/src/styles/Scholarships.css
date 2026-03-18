@@ -19,6 +19,10 @@
     color: var(--text-muted);
 }
 
+.detail-text {
+    color: var(--text-muted);
+}
+
 /* Filters & Search */
 .filters-bar {
     background: var(--surface);
@@ -53,7 +57,8 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     font-size: 0.95rem;
-    background-color: var(--background);
+    background-color: var(--surface);
+    color: var(--text-main);
     transition: all 0.2s;
 }
 
@@ -73,7 +78,7 @@
     padding: 0.625rem 1rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    background-color: var(--background);
+    background-color: var(--surface);
     font-size: 0.9rem;
     color: var(--text-main);
     cursor: pointer;
@@ -108,7 +113,7 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background-color: white;
+    background-color: var(--surface);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
     font-size: 0.75rem;
@@ -148,12 +153,12 @@
 }
 
 .tag {
-    background-color: #f1f5f9;
-    color: var(--text-muted);
+    background-color: var(--surface-muted);
+    color: var(--text-main);
     font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.625rem;
     border-radius: 0.25rem;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .card-details {
@@ -181,11 +186,27 @@
 
 .card-footer {
     padding: 1rem 1.5rem;
-    background-color: #f8fafc;
+    background-color: var(--surface-muted);
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     gap: 1rem;
+}
+
+/* Dark mode specific fixes to ensure no light overrides */
+.dark .tag {
+    background-color: var(--surface-muted);
+    color: var(--text-main);
+}
+
+.dark .card-footer {
+    background-color: var(--surface-muted);
+    border-top-color: var(--border);
+}
+
+.dark .card-badge {
+    background-color: var(--surface);
+    color: var(--primary);
 }
 
 .apply-btn {
@@ -200,7 +221,31 @@
 }
 
 .save-btn:hover {
-    background-color: white;
+    background-color: var(--background);
     color: var(--primary);
     border-color: var(--primary);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    grid-column: 1 / -1;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+}
+
+.empty-state p {
+    color: var(--text-muted);
 }

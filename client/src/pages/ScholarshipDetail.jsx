@@ -89,10 +89,10 @@ export default function ScholarshipDetail() {
                 <Link to="/scholarships" className="back-link">
                     <ArrowLeft size={16} /> Back to Scholarships
                 </Link>
-                <h1 className="detail-title">{scholarship.title}</h1>
+                <h1 className="detail-title">{scholarship.title?.replace(/BUDDY4STUDY\s*:?\s*/gi, '').trim()}</h1>
                 <div className="detail-provider">
                     <Building2 size={18} />
-                    {scholarship.provider}
+                    {scholarship.provider?.toLowerCase() === 'buddy4study' ? 'EduGrant Partner' : (scholarship.provider || 'Scholarship Provider')}
                 </div>
             </div>
 
@@ -102,14 +102,14 @@ export default function ScholarshipDetail() {
 
                     <div className="detail-section">
                         <h3 className="section-title">About the Scholarship</h3>
-                        <p className="text-slate-600 leading-relaxed">
+                        <p className="detail-text leading-relaxed">
                             {scholarship.description}
                         </p>
                     </div>
 
                     <div className="detail-section">
                         <h3 className="section-title">Eligibility Criteria</h3>
-                        <p className="text-slate-600 leading-relaxed">
+                        <p className="detail-text leading-relaxed">
                             {scholarship.eligibility_criteria}
                         </p>
                     </div>

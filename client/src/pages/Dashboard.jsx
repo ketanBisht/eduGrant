@@ -94,14 +94,14 @@ export default function Dashboard() {
             ))}
           </div>
 
-          <div className="mt-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
+          <div className="mt-4 p-4 rounded-lg border" style={{ backgroundColor: 'var(--surface-muted)', borderColor: 'var(--border)' }}>
             <h4 className="font-semibold text-sm mb-2">Complete your profile</h4>
 
-            <div className="w-full bg-slate-200 rounded-full h-2 mb-2">
+            <div className="w-full rounded-full h-2 mb-2" style={{ backgroundColor: 'var(--border)' }}>
               <div className="bg-emerald-500 h-2 rounded-full" style={{ width: "70%" }}></div>
             </div>
 
-            <p className="text-xs text-slate-500">70% Completed</p>
+            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>70% Completed</p>
           </div>
         </div>
       </div>

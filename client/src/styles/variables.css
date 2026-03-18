@@ -9,6 +9,7 @@
 
   --background: #f8fafc; /* Slate 50 */
   --surface: #ffffff;
+  --surface-muted: #f1f5f9;
   
   --text-main: #0f172a; /* Slate 900 */
   --text-muted: #64748b; /* Slate 500 */
@@ -34,12 +35,18 @@
 }
 
 .dark {
-  --background: #0f172a;
-  --surface: #1e293b;
-  --text-main: #f1f5f9;
-  --text-muted: #94a3b8;
-  --border: #334155;
+  --background: #050810;
+  --surface: #111827;
+  --surface-muted: #1f2937;
   
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --text-main: #ffffff;
+  --text-muted: #cbd5e1;
+  --border: #1e293b;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.8);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.9);
+
+  /* Overriding greens for higher contrast on dark backgrounds */
+  --primary: #10b981; 
+  --success: #4ade80; 
 }

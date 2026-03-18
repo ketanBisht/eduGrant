@@ -89,8 +89,9 @@
 }
 
 .deadline-box {
-    background: #fff7ed;
-    color: #c2410c;
+    background: var(--surface-muted);
+    color: var(--warning);
+    border: 1px solid var(--border);
     padding: 1rem;
     border-radius: var(--radius-md);
     margin-bottom: 1.5rem;

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@clerk/ui": "^1.2.2",
     "dotenv": "^17.2.3",
     "mongodb": "^7.1.0",
     "mongoose": "^9.1.6",
