@@ -1,46 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter, Loader2 } from 'lucide-react';
-import axios from 'axios';
+import { Search, Loader2 } from 'lucide-react';
 import ScholarshipCard from '../components/ScholarshipCard';
+import scholarshipsData from '../../../server/data/scholarships.json';
 import '../styles/Scholarships.css';
 
 export default function ScholarshipList() {
     const [search, setSearch] = useState('');
     const [filterType, setFilterType] = useState('all');
-    const [scholarships, setScholarships] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [scholarships, setScholarships] = useState(scholarshipsData);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        const fetchScholarships = async () => {
-            setLoading(true);
-            try {
-                // Determine API query params based on UI state
-                let query = '?';
-                if (search) query += `keyword=${search}&`;
-                // Basic mapping since schema changed 
-                if (filterType !== 'all') query += `type=${filterType}&`;
+        // Local filtering without backend
+        let filtered = scholarshipsData;
+        
+        if (search) {
+            const lowerSearch = search.toLowerCase();
+            filtered = filtered.filter(s => 
+                s.title?.toLowerCase().includes(lowerSearch) || 
+                s.source?.toLowerCase().includes(lowerSearch)
+            );
+        }
 
-                const res = await axios.get(`http://localhost:3000/api/scholarships${query}`);
-                setScholarships(res.data.data);
-                setError('');
-            } catch (err) {
-                console.error(err);
-                setError('Failed to fetch scholarships. Please check if the server is running.');
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (filterType !== 'all') {
+            const lowerType = filterType.toLowerCase();
+            filtered = filtered.filter(s => 
+                s.eligibility?.toLowerCase().includes(lowerType)
+            );
+        }
 
-        // Adding a basic debounce for search (using timeout)
-        const timeoutId = setTimeout(() => {
-            fetchScholarships();
-        }, 500);
-
-        return () => clearTimeout(timeoutId);
+        setScholarships(filtered);
     }, [search, filterType]);
 
-    // The backend handles filtering via query params now.
     const filteredScholarships = scholarships;
 
     return (
