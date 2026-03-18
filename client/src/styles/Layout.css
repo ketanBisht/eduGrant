@@ -96,6 +96,10 @@
     z-index: 40;
 }
 
+.dark .navbar {
+    background-color: rgba(30, 41, 59, 0.8);
+}
+
 .navbar-start h1 {
     font-size: 1.125rem;
     font-weight: 600;

@@ -107,9 +107,9 @@ export default function ScholarshipList() {
                 <div className="filter-group">
                     <select className="filter-select">
                         <option value="any">Any Amount</option>
-                        <option value="low">Under $1,000</option>
-                        <option value="mid">$1,000 - $5,000</option>
-                        <option value="high">$5,000+</option>
+                        <option value="low">Under ₹10,000</option>
+                        <option value="mid">₹10,000 - ₹20,000</option>
+                        <option value="high">₹20,000+</option>
                     </select>
                 </div>
             </div>

@@ -10,6 +10,7 @@ import {
   getAuth,
 } from "@clerk/express";
 import connectDB from "./config/db.js";
+import scholarshipRoutes from "./routes/scholarshipRoutes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,9 +21,10 @@ app.use(clerkMiddleware());
 
 
 
-connectDB();
-
 /* -------------------- ROUTES -------------------- */
+
+// Register specialized routes
+app.use("/api/scholarships", scholarshipRoutes);
 
 // Public route
 app.get("/", (req, res) => {

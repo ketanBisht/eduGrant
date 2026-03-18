@@ -58,6 +58,16 @@ button {
   background-color: var(--primary-hover);
 }
 
+.btn-secondary {
+  background-color: var(--surface);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--background);
+}
+
 .card {
   background-color: var(--surface);
   border-radius: var(--radius-lg);
