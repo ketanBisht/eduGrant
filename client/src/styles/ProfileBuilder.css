@@ -1,0 +1,384 @@
+/* ===========================
+   Profile Builder — Full CSS
+   =========================== */
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.pb-canvas {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+}
+
+/* ---- Header ---- */
+.pb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.25);
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.25rem;
+}
+
+.pb-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 30%, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 0.5rem;
+    line-height: 1.1;
+}
+
+.pb-subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ---- Step Indicators ---- */
+.pb-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 1.75rem;
+}
+
+.pb-step-item {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.pb-step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.pb-step-done {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+    box-shadow: 0 0 16px rgba(16,185,129,0.4);
+}
+
+.pb-step-active {
+    background: rgba(16,185,129,0.15);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.pb-step-idle {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-secondary);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.pb-step-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 6px 8px 0;
+    display: block;
+    text-align: center;
+    min-width: 60px;
+}
+
+.pb-step-label-active {
+    color: var(--primary);
+}
+
+.pb-step-line {
+    width: 48px;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+    transition: background 0.4s;
+    margin-bottom: 20px;
+}
+
+.pb-step-line-done {
+    background: var(--primary);
+}
+
+/* ---- Progress Bar ---- */
+.pb-progress-track {
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.05);
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+}
+
+.pb-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #34d399);
+    border-radius: 100px;
+    box-shadow: 0 0 12px rgba(16,185,129,0.5);
+}
+
+.pb-progress-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: right;
+    margin: 0 0 2rem;
+    letter-spacing: 0.02em;
+}
+
+/* ---- Form Card ---- */
+.pb-card {
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 28px;
+    padding: 3rem 3.5rem;
+    box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+/* ---- Step Header ---- */
+.pb-step-header {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.pb-step-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pb-step-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 4px;
+    line-height: 1.2;
+}
+
+.pb-step-sub {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ---- Fields ---- */
+.pb-field {
+    margin-bottom: 1.75rem;
+}
+
+.pb-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 0;
+}
+
+.pb-row .pb-field {
+    margin-bottom: 1.75rem;
+}
+
+@media (max-width: 580px) {
+    .pb-row { grid-template-columns: 1fr; }
+    .pb-card { padding: 2rem 1.5rem; }
+}
+
+.pb-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.pb-optional {
+    font-weight: 500;
+    text-transform: none;
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.pb-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 0.875rem 1.25rem;
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.pb-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.pb-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(16,185,129,0.12);
+    background: rgba(16,185,129,0.04);
+}
+
+.pb-input option {
+    background: #1a2535;
+    color: #fff;
+}
+
+.pb-hint {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    margin: 0.4rem 0 0;
+    opacity: 0.7;
+}
+
+/* ---- Summary Box ---- */
+.pb-summary {
+    background: rgba(16,185,129,0.05);
+    border: 1px solid rgba(16,185,129,0.2);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.pb-summary-title {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--primary);
+    margin: 0 0 1rem;
+}
+
+.pb-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.875rem 1.5rem;
+}
+
+.pb-summary-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pb-summary-key {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+}
+
+.pb-summary-val {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* ---- Navigation ---- */
+.pb-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.pb-btn-back {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    font-size: 0.9rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: color 0.2s;
+    font-family: inherit;
+}
+.pb-btn-back:hover { color: #fff; }
+
+.pb-btn-next {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 14px;
+    padding: 0.875rem 2rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 10px 25px -8px rgba(16,185,129,0.5);
+    font-family: inherit;
+}
+.pb-btn-next:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px -8px rgba(16,185,129,0.65);
+}
+.pb-btn-next:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pb-btn-complete {
+    background: linear-gradient(135deg, #10b981 0%, #6366f1 100%);
+    box-shadow: 0 10px 25px -8px rgba(99,102,241,0.5);
+    padding: 0.875rem 2.25rem;
+}
+
+/* ---- Footer ---- */
+.pb-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}

@@ -4,11 +4,14 @@ import {
   getScholarshipById,
   createScholarship,
   updateScholarship,
-  deleteScholarship
+  deleteScholarship,
+  getRecommendations
 } from "../controllers/scholarshipController.js";
 import { isAuthenticated, isAdmin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+router.get("/recommended", isAuthenticated, getRecommendations);
 
 router.route("/")
   .get(getAllScholarships)

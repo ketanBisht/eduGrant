@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  NGO
+  ADMIN
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  ACCEPTED
+  REJECTED
+}
+
+enum SourceType {
+  GOVERNMENT
+  CORPORATE_CSR
+  NGO
+}
+
+model Student {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId         String        @unique
+  email           String        @unique
+  name            String
+  role            Role          @default(STUDENT)
+
+  // Step 1 - Personal
+  gender          String?
+  religion        String?
+  whatsapp        String?
+
+  // Step 2 - Academic
+  course          String?
+  yearOfStudy     String?
+  boardType       String?
+  academicPercentage Float?
+
+  // Step 3 - Eligibility
+  category        String?       // General, OBC, SC, ST, EWS
+  state           String?       // Domicile state
+  disability      String?       // PwD status
+
+  // Step 4 - Financial
+  income          Float?
+  fatherOccupation String?
+  motherOccupation String?
+
+  profileStatus   String        @default("PENDING")
+  documents       Document[]
+  applications    Application[]
+  savedScholarships SavedScholarship[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Scholarship {
+  id                  String        @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  provider            String
+  officialLink        String
+  amount              Float
+  deadline            DateTime
+  source              SourceType    @default(GOVERNMENT)
+  description         String?
+  
+  // Structured Eligibility
+  minPercentage       Float?
+  maxIncome           Float?
+  categoryEligible    String[]      // List of categories eligible
+  state               String?
+  gender              String?       // All, Male, Female
+  
+  applications        Application[]
+  savedByStudents     SavedScholarship[]
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  @@unique([title, provider])
+}
+
+model Document {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  studentId   String    @db.ObjectId
+  student     Student   @relation(fields: [studentId], references: [id])
+  type        String    // Income, Caste, Marksheet, ID_Proof
+  url         String
+  isVerified  Boolean   @default(false)
+  metadata    Json?     // Storing extracted info like income value or category
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Application {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  studentId       String            @db.ObjectId
+  student         Student           @relation(fields: [studentId], references: [id])
+  scholarshipId   String            @db.ObjectId
+  scholarship     Scholarship       @relation(fields: [scholarshipId], references: [id])
+  status          ApplicationStatus @default(PENDING)
+  appliedAt       DateTime          @default(now())
+}
+
+model SavedScholarship {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  studentId       String            @db.ObjectId
+  student         Student           @relation(fields: [studentId], references: [id])
+  scholarshipId   String            @db.ObjectId
+  scholarship     Scholarship       @relation(fields: [scholarshipId], references: [id])
+  savedAt         DateTime          @default(now())
+
+  @@unique([studentId, scholarshipId])
+}

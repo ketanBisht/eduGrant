@@ -102,12 +102,12 @@ export default function Landing() {
               <p style={{ color: "var(--text-muted)" }}>View your applications and track your success rates.</p>
             </Link>
 
-            <Link to="/applications" className="feature-card" style={{ textDecoration: "none", flex: "1", minWidth: "250px", maxWidth: "320px" }}>
+            <Link to="/profile-builder" className="feature-card" style={{ textDecoration: "none", flex: "1", minWidth: "250px", maxWidth: "320px" }}>
               <div className="feature-icon" style={{ color: "var(--warning)", backgroundColor: "rgba(245, 158, 11, 0.1)" }}>
                 <FileCheck size={32} />
               </div>
-              <h3 style={{ color: "var(--text-main)", fontSize: "1.25rem" }}>My Applications</h3>
-              <p style={{ color: "var(--text-muted)" }}>Review and manage all your active scholarship applications.</p>
+              <h3 style={{ color: "var(--text-main)", fontSize: "1.25rem" }}>Profile Builder</h3>
+              <p style={{ color: "var(--text-muted)" }}>Complete your academic and personal profile to unlock smart matches.</p>
             </Link>
           </div>
         </div>

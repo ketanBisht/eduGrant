@@ -1,150 +1,228 @@
-/* Dashboard Page */
+/* Premium Dashboard Styles */
 .dashboard-page {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 3rem;
+    padding: 1rem;
 }
 
-.welcome-section h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text-main);
+.welcome-section {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.welcome-text h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
     margin-bottom: 0.5rem;
+    background: linear-gradient(to right, #fff, var(--text-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.welcome-section p {
-    color: var(--text-muted);
+.welcome-text p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
 }
 
-/* Stats Grid */
+.vault-cta {
+    background: var(--primary);
+    color: var(--bg-main);
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.3s;
+}
+
+.vault-cta:hover {
+    transform: scale(1.05);
+}
+
+/* Glass Stats */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.2s;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
 }
 
 .stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    border-color: var(--primary);
+    transform: translateY(-5px);
 }
 
 .stat-icon {
     width: 48px;
     height: 48px;
-    border-radius: 12px;
-    background-color: rgba(16, 185, 129, 0.1);
+    border-radius: 14px;
+    background: rgba(16, 185, 129, 0.1);
     color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+}
+
 .stat-info h3 {
     font-size: 0.875rem;
-    color: var(--text-muted);
-    font-weight: 500;
-}
-
-.stat-value {
-    font-size: 1.5rem;
     font-weight: 700;
-    color: var(--text-main);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
 }
 
-/* Dashboard Sections */
+/* Dashboard Content */
 .dashboard-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 1.5rem;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 2rem;
 }
 
 .section-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--border-glass);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
 }
 
 .section-header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.5rem;
+    align-items: center;
+    margin-bottom: 2rem;
 }
 
 .section-header h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-}
-
-.view-all {
-    font-size: 0.875rem;
-    color: var(--primary);
-    font-weight: 500;
-}
-
-.view-all:hover {
-    text-decoration: underline;
-}
-
-/* Items List */
-.scholarship-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
 }
 
 .scholarship-item {
+    background: var(--bg-surface-lighter);
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background-color: var(--background);
-    border-radius: var(--radius-md);
-    border: 1px solid transparent;
-    transition: all 0.2s;
+    margin-bottom: 0.75rem;
+    border: 1px solid var(--border-glass);
+    transition: 0.2s;
 }
 
 .scholarship-item:hover {
     border-color: var(--primary);
-    background-color: var(--surface-muted);
+    background: rgba(16, 185, 129, 0.05);
 }
 
 .item-info h4 {
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 700;
     margin-bottom: 0.25rem;
+    color: white;
 }
 
 .item-meta {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
+    font-weight: 500;
 }
 
-.deadline-tag {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 1rem;
-    background-color: rgba(245, 158, 11, 0.1);
-    color: var(--warning);
-    font-weight: 600;
+.mini-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.2s;
+}
+
+.mini-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.insight-card {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-glass);
 }
 
 @media (max-width: 1024px) {
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+}
+
+.urgent-badge {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.urgent-border {
+    border-left: 4px solid #ef4444;
+}
+
+.empty-msg {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.match-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.match-badge.high-match {
+    background: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+}
+
+.match-badge svg {
+    width: 10px;
+    height: 10px;
 }

@@ -11,11 +11,12 @@ export default function Sidebar() {
   const navItems = [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Scholarships", path: "/scholarships", icon: GraduationCap },
-    { label: "My Applications", path: "/applications", icon: FileText },
   ];
 
-  // Admin access
-  if (user?.publicMetadata?.role === "admin") {
+  const role = user?.publicMetadata?.role || "student";
+
+  // Role-based links
+  if (role === "admin" || user?.emailAddresses?.some(e => e.emailAddress.includes('admin'))) {
     navItems.push({ label: "Admin Panel", path: "/admin", icon: ShieldCheck });
   }
 

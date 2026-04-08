@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/express";
-import Student from "../models/Student.js";
+import prisma from "../config/prisma.js";
 
 // 1. Clerk User Sync & Authentication Middleware
 export const isAuthenticated = async (req, res, next) => {
@@ -12,7 +12,9 @@ export const isAuthenticated = async (req, res, next) => {
     }
 
     // Attempt to find the user in our DB
-    let student = await Student.findOne({ clerkId: userId });
+    let student = await prisma.student.findUnique({ 
+        where: { clerkId: userId } 
+    });
 
     // If they don't exist in our DB yet, fetch from Clerk and sync
     if (!student) {
@@ -20,11 +22,13 @@ export const isAuthenticated = async (req, res, next) => {
       const email = clerkUser.emailAddresses[0]?.emailAddress;
       const name = `${clerkUser.firstName || ""} ${clerkUser.lastName || ""}`.trim() || email;
 
-      student = await Student.create({
-        clerkId: userId,
-        name,
-        email,
-        role: "student" // default role
+      student = await prisma.student.create({
+        data: {
+            clerkId: userId,
+            name,
+            email,
+            role: "STUDENT" // default role in Prisma enum
+        }
       });
     }
 
@@ -39,7 +43,7 @@ export const isAuthenticated = async (req, res, next) => {
 
 // 2. Admin verification middleware
 export const isAdmin = (req, res, next) => {
-  if (req.user && req.user.role === "admin") {
+  if (req.user && (req.user.role === "ADMIN" || req.user.role === "admin")) {
     next();
   } else {
     res.status(403).json({ success: false, message: "Forbidden - Admin access required" });

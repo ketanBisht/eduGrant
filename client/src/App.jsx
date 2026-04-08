@@ -1,116 +1,50 @@
 import { Routes, Route } from "react-router-dom";
-import { SignIn, SignUp } from "@clerk/clerk-react";
+import { Toaster } from "react-hot-toast";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./components/DashboardLayout";
-import { Toaster } from "react-hot-toast";
 
 // Pages
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import ScholarshipList from "./pages/ScholarshipList";
 import ScholarshipDetail from "./pages/ScholarshipDetail";
-import Applications from "./pages/Applications";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Vault from "./pages/Vault";
+import ProfileBuilder from "./pages/ProfileBuilder";
 
 function App() {
   return (
     <>
       <Toaster position="top-center" />
       <Routes>
-        {/* Public */}
-      <Route path="/" element={<Landing />} />
+        {/* Public Routes */}
+        <Route path="/" element={<Landing />} />
 
-      {/* Clerk Auth */}
-      {/* Register Route */}
-      <Route
-        path="/register/*"
-        element={<Register />}
-        // element={<SignUp path="/register" routing="path" signInUrl="/login" fallbackRedirectUrl="/" />}
-      />
-      {/* Login Route */}
-      <Route
-        path="/login/*"
-        element={<Login />}
-      />
-      {/* <Route
-        path="/login/*"
-        element={<SignIn path="/login" routing="path" signUpUrl="/register" fallbackRedirectUrl="/" />}
-      /> */}
-      {/* <Route path="/login/*" element={<SignIn routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
-      {/* <Route path="/register/*" element={<SignUp routing="path" fallbackRedirectUrl="/dashboard" />} /> */}
+        {/* Clerk Auth */}
+        <Route path="/register/*" element={<Register />} />
+        <Route path="/login/*" element={<Login />} />
 
-      {/* Protected */}
-      <Route
-        element={
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        }
-      >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/scholarships" element={<ScholarshipList />} />
-        <Route path="/scholarships/:id" element={<ScholarshipDetail />} />
-        <Route path="/applications" element={<Applications />} />
-        <Route path="/admin" element={<AdminPanel />} />
-      </Route>
-    </Routes>
+        {/* Protected Routes */}
+        <Route
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/scholarships" element={<ScholarshipList />} />
+          <Route path="/scholarships/:id" element={<ScholarshipDetail />} />
+          <Route path="/vault" element={<Vault />} />
+          <Route path="/profile-builder" element={<ProfileBuilder />} />
+          <Route path="/admin" element={<AdminPanel />} />
+        </Route>
+      </Routes>
     </>
   );
 }
 
 export default App;
-
-// import { Routes, Route } from "react-router-dom";
-
-// import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
-// import ProtectedRoute from "./components/ProtectedRoute";
-// import { SignIn, SignUp } from "@clerk/clerk-react";
-
-// // Pages
-// import Landing from "./pages/Landing";
-// import Login from "./pages/Login";
-// import Register from "./pages/Register";
-// import Dashboard from "./pages/Dashboard";
-// import ScholarshipList from "./pages/ScholarshipList";
-// import ScholarshipDetail from "./pages/ScholarshipDetail";
-// import Applications from "./pages/Applications";
-// import AdminPanel from "./pages/AdminPanel";
-
-// import DashboardLayout from "./components/DashboardLayout";
-
-// function App() {
-//   return (
-//     <>
-//       <Routes>
-//         {/* Public */}
-//         <Route path="/" element={<Landing />} />
-//         {/* <Route path="/login" element={<Login />} />
-//         <Route path="/register" element={<Register />} /> */}
-
-//         {/* Clerk Auth Routes */}
-//         <Route path="/login/*" element={<SignIn routing="path" fallbackRedirectUrl="/dashboard" />} />
-//         <Route path="/register/*" element={<SignUp routing="path" fallbackRedirectUrl="/dashboard" />} />
-
-//         {/* Protected */}
-//         <Route
-//           element={
-//             <ProtectedRoute>
-//               <DashboardLayout />
-//             </ProtectedRoute>
-//           }
-//         >
-//           <Route path="/dashboard" element={<Dashboard />} />
-//           <Route path="/scholarships" element={<ScholarshipList />} />
-//           <Route path="/scholarships/:id" element={<ScholarshipDetail />} />
-//           <Route path="/applications" element={<Applications />} />
-//           <Route path="/admin" element={<AdminPanel />} />
-//         </Route>
-//       </Routes>
-//     </>
-//   );
-// }
-
-// export default App;

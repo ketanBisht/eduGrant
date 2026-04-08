@@ -10,7 +10,7 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 import { useTheme } from "./context/ThemeContext.jsx";
 
-const PUBLISHABLE_KEY = "pk_test_Y2xpbWJpbmctZHJha2UtODUuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");

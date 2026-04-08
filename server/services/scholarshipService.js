@@ -1,25 +1,25 @@
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+import prisma from '../config/prisma.js';
 
 export const getAllScholarships = async () => {
     try {
-        const dataPath = path.join(__dirname, '../data/scholarships.json');
-        
-        try {
-            await fs.access(dataPath);
-        } catch (error) {
-            console.warn("Data file not found, returning empty array.");
-            return [];
-        }
-
-        const rawData = await fs.readFile(dataPath, 'utf-8');
-        return JSON.parse(rawData);
+        return await prisma.scholarship.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
     } catch (error) {
-        console.error("Error reading scholarships data:", error);
+        console.error("Error fetching scholarships from database:", error);
         throw new Error("Could not retrieve scholarships data");
+    }
+};
+
+export const getScholarshipById = async (id) => {
+    try {
+        return await prisma.scholarship.findUnique({
+            where: { id }
+        });
+    } catch (error) {
+        console.error(`Error fetching scholarship with ID ${id}:`, error);
+        throw new Error("Could not retrieve scholarship");
     }
 };
