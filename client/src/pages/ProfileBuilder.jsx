@@ -67,6 +67,7 @@ export default function ProfileBuilder() {
     const [saving, setSaving] = useState(false);
     const [loadingProfile, setLoadingProfile] = useState(true);
     const [formData, setFormData] = useState(emptyForm);
+    const [isReviewMode, setIsReviewMode] = useState(false);
 
     useEffect(() => {
         axios.get('/api/students/profile')
@@ -89,6 +90,9 @@ export default function ProfileBuilder() {
                         fatherOccupation:   p.fatherOccupation || '',
                         motherOccupation:   p.motherOccupation || '',
                     });
+                    if (p.profileStatus === 'COMPLETE') {
+                        setIsReviewMode(true);
+                    }
                 }
             })
             .catch(err => console.error("Failed to load profile", err))
@@ -142,11 +146,60 @@ export default function ProfileBuilder() {
             <motion.div style={{ textAlign:'center', marginBottom:'2.5rem' }}
                 initial={{ opacity:0, y:-20 }} animate={{ opacity:1, y:0 }}>
                 <div className="pb-badge"><Sparkles size={13}/> Intelligence Engine</div>
-                <h1 className="pb-title">Personalize Your Journey</h1>
-                <p className="pb-subtitle">Complete all {TOTAL_STEPS} steps to unlock verified Smart Matches</p>
+                <h1 className="pb-title">{isReviewMode ? "Your Verified Profile" : "Personalize Your Journey"}</h1>
+                <p className="pb-subtitle">
+                    {isReviewMode 
+                        ? "Your details are verified and used for smart matchmaking." 
+                        : `Complete all ${TOTAL_STEPS} steps to unlock verified Smart Matches`}
+                </p>
             </motion.div>
 
-            {/* Step Indicators */}
+            {isReviewMode ? (
+                <motion.div 
+                    initial={{ opacity:0, scale:0.95 }} 
+                    animate={{ opacity:1, scale:1 }}
+                    className="pb-card pb-summary-card"
+                >
+                    <div className="pb-summary-header">
+                        <div className="pb-status-badge">
+                            <ShieldCheck size={16}/> Profile Verified
+                        </div>
+                        <button onClick={() => setIsReviewMode(false)} className="pb-edit-btn">
+                            Edit Profile
+                        </button>
+                    </div>
+
+                    <div className="pb-summary-grid-large">
+                        <SummarySection title="Personal" icon={User}>
+                            <SummaryField label="Name" value={formData.name} />
+                            <SummaryField label="Gender" value={formData.gender} />
+                            <SummaryField label="WhatsApp" value={formData.whatsapp} />
+                            <SummaryField label="Religion" value={formData.religion} />
+                        </SummarySection>
+
+                        <SummarySection title="Academic" icon={GraduationCap}>
+                            <SummaryField label="Course" value={formData.course} />
+                            <SummaryField label="Year" value={formData.yearOfStudy} />
+                            <SummaryField label="Board" value={formData.boardType} />
+                            <SummaryField label="Percentage" value={`${formData.academicPercentage}%`} />
+                        </SummarySection>
+
+                        <SummarySection title="Eligibility" icon={BookOpen}>
+                            <SummaryField label="State" value={formData.state} />
+                            <SummaryField label="Category" value={formData.category} />
+                            <SummaryField label="Disability" value={formData.disability || 'None'} />
+                        </SummarySection>
+
+                        <SummarySection title="Financial" icon={Wallet}>
+                            <SummaryField label="Family Income" value={`₹${formData.income}`} />
+                            <SummaryField label="Father's Job" value={formData.fatherOccupation} />
+                            <SummaryField label="Mother's Job" value={formData.motherOccupation} />
+                        </SummarySection>
+                    </div>
+                </motion.div>
+            ) : (
+                <>
+                    {/* Step Indicators */}
             <div className="pb-steps">
                 {STEPS.map((s, i) => {
                     const Icon = s.icon;
@@ -371,6 +424,8 @@ export default function ProfileBuilder() {
                 <ShieldCheck size={16} style={{ color:'var(--primary)' }}/>
                 Your data is encrypted and used only for scholarship matching
             </p>
+                </>
+            )}
         </div>
     );
 }
@@ -385,6 +440,28 @@ function StepHeader({ Icon, title, sub, color }) {
                 <h3 className="pb-step-title">{title}</h3>
                 <p className="pb-step-sub">{sub}</p>
             </div>
+        </div>
+    );
+}
+
+function SummarySection({ title, icon: Icon, children }) {
+    return (
+        <div className="pb-summary-section">
+            <h4 className="pb-summary-section-title">
+                <Icon size={14} /> {title}
+            </h4>
+            <div className="pb-summary-section-content">
+                {children}
+            </div>
+        </div>
+    );
+}
+
+function SummaryField({ label, value }) {
+    return (
+        <div className="pb-summary-field">
+            <span className="pb-summary-field-label">{label}</span>
+            <span className="pb-summary-field-value">{value || '—'}</span>
         </div>
     );
 }

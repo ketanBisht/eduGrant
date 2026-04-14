@@ -286,49 +286,80 @@ export const getRecommendations = async (req, res) => {
 
     // Score and Rank Algorithm
     const scored = eligibleScholarships.map(sch => {
-        let score = 0;
+        // Base match score for being eligible (passing the 'where' filters)
+        let score = 15;
+        const matchReasons = [];
 
-        // 1. Geography specific
-        // Only penalize if student HAS a state and it's different. If student state is missing, treat as potential match.
+        // 0. Base reason (every eligible scholarship has a base match basis)
+        if (sch.source === 'GOVERNMENT') matchReasons.push("Govt Verified");
+        else if (sch.source === 'CORPORATE_CSR') matchReasons.push("CSR Match");
+
+        // 1. Geography specific bonus
         if (sch.state && sch.state !== "All") {
             if (student.state && sch.state.toLowerCase() === student.state.toLowerCase()) {
                 score += 30;
+                matchReasons.push("State Match");
             } else if (student.state) {
-                // Only subtract if we are sure it's a mismatch
                 score -= 50; 
             }
         }
         
-        // 2. Category specific
+        // 2. Category specific bonus
         if (sch.categoryEligible && sch.categoryEligible.length > 0 && !sch.categoryEligible.includes('All')) {
             if (student.category && sch.categoryEligible.includes(student.category)) {
                 score += 25;
+                matchReasons.push(`${student.category} Match`);
             } else if (student.category) {
                 score -= 30;
             }
+        } else {
+            matchReasons.push("Open to All");
         }
 
-        // 3. Gender specific 
+        // 3. Gender specific bonus
         if (sch.gender && sch.gender !== "All") {
             if (student.gender && sch.gender.toLowerCase() === student.gender.toLowerCase()) {
                 score += 20;
+                matchReasons.push("Gender Match");
             } else if (student.gender) {
                 score -= 40;
             }
         }
 
-        // 4. Financial Merit
-        if (sch.amount) {
-            score += Math.min(15, sch.amount / 5000);
-        }
-        
-        // 5. Urgency
-        if (sch.deadline) {
-            const daysLeft = (new Date(sch.deadline) - new Date()) / (1000 * 60 * 60 * 24);
-            if (daysLeft > 0 && daysLeft <= 14) score += 10;
+        // 4. Academic Merit bonus
+        if (sch.minPercentage && student.academicPercentage) {
+            if (student.academicPercentage >= sch.minPercentage + 15) {
+                score += 15;
+                matchReasons.push("High Merit");
+            } else if (student.academicPercentage >= sch.minPercentage) {
+                score += 5;
+                matchReasons.push("Merit Match");
+            }
+        } else if (!sch.minPercentage) {
+            matchReasons.push("No Min Marks");
         }
 
-        return { ...sch, matchScore: Math.round(score) };
+        // 5. Financial Eligibility
+        if (sch.maxIncome) {
+            if (student.income !== null && student.income <= sch.maxIncome) {
+                matchReasons.push("Income Match");
+                if (student.income <= sch.maxIncome * 0.5) {
+                    score += 10;
+                    matchReasons.push("Highly Eligible");
+                }
+            }
+        }
+        
+        // 6. Urgency bonus
+        if (sch.deadline) {
+            const daysLeft = (new Date(sch.deadline) - new Date()) / (1000 * 60 * 60 * 24);
+            if (daysLeft > 0 && daysLeft <= 14) {
+                score += 10;
+                matchReasons.push("Closing Soon");
+            }
+        }
+
+        return { ...sch, matchScore: Math.round(Math.max(5, score)), matchReasons: [...new Set(matchReasons)].slice(0, 3) };
     });
 
     // Sort by score first, then by deadline (with safety check for missing deadlines)

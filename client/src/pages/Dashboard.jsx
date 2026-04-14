@@ -226,11 +226,27 @@ export default function Dashboard() {
                         whileHover={{ x: 5 }}
                     >
                         <div className="item-info">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                                 <h4>{item.title}</h4>
-                                {item.matchScore && (
+                                {item.matchScore > 0 && (
                                     <div className={`match-badge ${item.matchScore >= 80 ? 'high-match' : ''}`}>
                                         <Zap size={10} fill="currentColor" /> {item.matchScore}% Match
+                                    </div>
+                                )}
+                                {item.matchReasons?.length > 0 && (
+                                    <div className="flex gap-1" style={{ display: 'flex', gap: '4px' }}>
+                                        {item.matchReasons.map((reason, idx) => (
+                                            <span key={idx} style={{ 
+                                                fontSize: '0.6rem', 
+                                                background: 'rgba(255,255,255,0.05)', 
+                                                padding: '2px 6px', 
+                                                borderRadius: '4px',
+                                                color: 'var(--text-muted)',
+                                                border: '1px solid rgba(255,255,255,0.1)'
+                                            }}>
+                                                {reason}
+                                            </span>
+                                        ))}
                                     </div>
                                 )}
                             </div>

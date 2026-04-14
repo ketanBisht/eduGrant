@@ -31,6 +31,18 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
         : 'Always Open';
     const source   = scholarship.source   || 'GOVERNMENT';
     const urgency  = getDeadlineUrgency(scholarship.deadline);
+    const matchReasons = scholarship.matchReasons || [];
+
+    const getTagClass = (reason) => {
+        const r = reason.toLowerCase();
+        if (r.includes('state')) return 'state';
+        if (r.includes('match') && (r.includes('obc') || r.includes('sc') || r.includes('st') || r.includes('general') || r.includes('ews'))) return 'caste';
+        if (r.includes('gender')) return 'gender';
+        if (r.includes('merit')) return 'merit';
+        if (r.includes('financial')) return 'financial';
+        if (r.includes('closing')) return 'urgency';
+        return 'default';
+    };
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -85,7 +97,7 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
             <div className="card-content-main">
                 {/* Left Section: Identity */}
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                         <h3 className="card-title" style={{ fontSize: '1.2rem', marginBottom: 0 }}>{title}</h3>
                         <span className={`source-tag ${source.toLowerCase()}`} style={{ fontSize: '0.6rem', padding: '2px 6px' }}>
                             {source.replace('_', ' ')}
@@ -95,6 +107,19 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
                         <Building2 size={12} className="text-primary"/>
                         <span>{provider}</span>
                     </div>
+
+                    {scholarship.matchScore > 0 && (
+                        <div className="match-tags-container" style={{ marginBottom: '8px' }}>
+                            <span className="match-tag" style={{ background: 'rgba(16, 185, 129, 0.2)', color: 'var(--primary)', borderColor: 'rgba(16, 185, 129, 0.3)' }}>
+                                <Zap size={8} fill="currentColor" /> {scholarship.matchScore}% Match
+                            </span>
+                            {matchReasons.length > 0 && matchReasons.map((reason, idx) => (
+                                <span key={idx} className={`match-tag ${getTagClass(reason)}`}>
+                                    {reason}
+                                </span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Right Section: Metrics */}
