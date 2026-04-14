@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
+import api from '../api';
 import { 
     Plus, Edit2, Trash2, Users, FileText, CheckCircle, 
     XCircle, Loader2, X, Building, Check, ExternalLink,
     Zap, TrendingUp, ShieldCheck
 } from 'lucide-react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import '../styles/Admin.css';
 
@@ -31,13 +31,13 @@ export default function AdminPanel() {
         try {
             setLoading(true);
             if (activeTab === 'stats') {
-                const res = await axios.get('/api/admin/stats');
+                const res = await api.get('/admin/stats');
                 setStats(res.data.data);
             } else if (activeTab === 'scholarships') {
-                const res = await axios.get('/api/scholarships');
+                const res = await api.get('/scholarships');
                 setScholarships(res.data.data);
             } else if (activeTab === 'users') {
-                const res = await axios.get('/api/admin/users');
+                const res = await api.get('/admin/users');
                 setUsers(res.data.data);
             }
         } catch (error) {
@@ -49,23 +49,23 @@ export default function AdminPanel() {
     };
 
     const handleDeleteUser = async (id) => {
-        if (!window.confirm('Remove this user and all their applications?')) return;
+        if (!window.confirm('Delete this user?')) return;
         try {
-            await axios.delete(`/api/admin/users/${id}`);
+            await api.delete(`/admin/users/${id}`);
+            setUsers(users.filter(u => u.id !== id));
             toast.success('User removed');
-            fetchData();
-        } catch (error) {
+        } catch (err) {
             toast.error('Failed to delete user');
         }
     };
 
     const handleDeleteScholarship = async (id) => {
-        if (!window.confirm('Delete this listing permanently?')) return;
+        if (!window.confirm('Delete this scholarship?')) return;
         try {
-            await axios.delete(`/api/scholarships/${id}`);
-            toast.success('Deleted successfully');
-            fetchData();
-        } catch (error) {
+            await api.delete(`/scholarships/${id}`);
+            setScholarships(scholarships.filter(s => s.id !== id));
+            toast.success('Scholarship removed');
+        } catch (err) {
             toast.error('Delete failed');
         }
     };
@@ -74,10 +74,11 @@ export default function AdminPanel() {
         e.preventDefault();
         try {
             setSubmitting(true);
-            await axios.post('/api/scholarships', formData);
-            toast.success('New scholarship listed!');
+            const res = await api.post('/scholarships', formData);
+            setScholarships([res.data.data, ...scholarships]);
             setIsModalOpen(false);
             setFormData({ title: '', provider: '', description: '', amount: '', deadline: '', officialLink: '', state: 'All', gender: 'All' });
+            toast.success('Scholarship published!');
             fetchData();
         } catch (error) {
             toast.error('Failed to add scholarship');

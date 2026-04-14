@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { motion } from 'framer-motion';
 import {
     Clock, Building2, ExternalLink, ChevronLeft, ShieldCheck,
@@ -29,7 +29,7 @@ export default function ScholarshipDetail() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        axios.get(`/api/scholarships/${id}`)
+        api.get(`/scholarships/${id}`)
             .then(res => setScholarship(res.data.data))
             .catch(() => setError(true))
             .finally(() => setLoading(false));

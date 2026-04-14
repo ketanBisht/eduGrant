@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Clock, Bookmark, Building2, ChevronRight, ShieldCheck, Zap, AlertTriangle } from 'lucide-react';
-import axios from 'axios';
+import api from '../api';
 import toast from 'react-hot-toast';
 import '../styles/Scholarships.css';
 
@@ -52,11 +52,11 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
         try {
             setSaving(true);
             if (isSaved) {
-                await axios.delete(`/api/saved/${scholarship.id}`);
+                await api.delete(`/saved/${scholarship.id}`);
                 setIsSaved(false);
                 toast.success('Scholarship Unsaved');
             } else {
-                await axios.post('/api/saved', { scholarshipId: scholarship.id });
+                await api.post('/saved', { scholarshipId: scholarship.id });
                 setIsSaved(true);
                 toast.success('Scholarship Saved');
             }

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     User, GraduationCap, BookOpen, Wallet,
@@ -70,8 +70,9 @@ export default function ProfileBuilder() {
     const [isReviewMode, setIsReviewMode] = useState(false);
 
     useEffect(() => {
-        axios.get('/api/students/profile')
-            .then(res => {
+        const fetchProfile = async () => {
+            try {
+                const res = await api.get('/students/profile');
                 if (res.data.success && res.data.data) {
                     const p = res.data.data;
                     setFormData({
@@ -94,9 +95,13 @@ export default function ProfileBuilder() {
                         setIsReviewMode(true);
                     }
                 }
-            })
-            .catch(err => console.error("Failed to load profile", err))
-            .finally(() => setLoadingProfile(false));
+            } catch (err) {
+                console.error("Failed to load profile", err);
+            } finally {
+                setLoadingProfile(false);
+            }
+        };
+        fetchProfile();
     }, []);
 
     const handleChange = e => {
@@ -107,10 +112,13 @@ export default function ProfileBuilder() {
     const saveStep = async () => {
         const err = validate(step, formData);
         if (err) { toast.error(err, { icon: '⚠️' }); return false; }
-        setSaving(true);
         try {
-            await axios.put('/api/students/profile', formData);
-            return true;
+            setSaving(true);
+            const res = await api.put('/students/profile', formData);
+            if (res.data.success) {
+                toast.success('Profile updated successfully!');
+                return true;
+            }
         } catch (e) {
             toast.error(e?.response?.data?.message || 'Save failed. Please try again.');
             return false;

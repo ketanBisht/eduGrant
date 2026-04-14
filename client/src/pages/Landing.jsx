@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import api from "../api";
 import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, TrendingUp, Users, Award, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen } from "lucide-react";
-import axios from "axios";
 import "../styles/Landing.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
@@ -20,7 +20,7 @@ export default function Landing() {
       try {
         setLoading(true);
         // Fetch stats + recent scholarships
-        const res = await axios.get('/api/scholarships', { params: { limit: 3, sortBy: 'createdAt', sortOrder: 'desc' } });
+        const res = await api.get('/scholarships', { params: { limit: 3, sortBy: 'createdAt', sortOrder: 'desc' } });
         setStats({ 
            count: res.data.pagination.total, 
            totalAmount: 1639000 // Real aggregated value from my previous DB research

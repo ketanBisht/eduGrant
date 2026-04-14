@@ -19,7 +19,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* -------------------- MIDDLEWARE -------------------- */
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  process.env.FRONTEND_URL, // This will be your Vercel URL
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 app.use(express.json());
 app.use(clerkMiddleware());
 
@@ -52,7 +67,11 @@ app.get("/protected", requireAuth(), async (req, res) => {
 
 /* -------------------- SERVER -------------------- */
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`
+EduGrant API is Live 🚀
+Mode: ${process.env.NODE_ENV || 'development'}
+Port: ${PORT}
+  `);
 });
 
 

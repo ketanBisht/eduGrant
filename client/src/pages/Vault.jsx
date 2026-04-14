@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { FolderOpen, UploadCloud, FileText, ChevronRight, CheckCircle2, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 
 export default function Vault() {
   const containerVariants = {
@@ -19,9 +19,9 @@ export default function Vault() {
 
   const fetchDocs = async () => {
     try {
-      const res = await axios.get('/api/students/profile');
+      const res = await api.get('/vault');
       if (res.data.success) {
-        setDocs(res.data.data.documents || []);
+        setDocs(res.data.data || []);
       }
     } catch (e) {
       console.error("Failed to fetch documents", e);

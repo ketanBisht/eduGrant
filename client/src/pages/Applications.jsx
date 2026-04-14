@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { CheckCircle, Clock, XCircle, ChevronRight, Loader2, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../styles/Applications.css';
@@ -13,7 +13,7 @@ export default function Applications() {
         const fetchApplications = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get('/api/applications/user');
+                const res = await api.get('/applications/my-applications');
                 setApplications(res.data.data);
             } catch (err) {
                 console.error(err);

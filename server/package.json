@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "postinstall": "prisma generate",
     "import-data": "node scripts/importLegacyData.js",
     "scrape": "node scripts/scrapeBuddy4Study.js",
     "test": "echo \"Error: no test specified\" && exit 1"

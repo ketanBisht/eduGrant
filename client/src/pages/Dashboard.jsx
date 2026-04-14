@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../api";
 import { FileText, CheckCircle, Bookmark, Clock, Zap, TrendingUp, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
@@ -29,9 +29,9 @@ export default function Dashboard() {
         setLoading(true);
 
         const [profileRes, recsRes, savedRes] = await Promise.allSettled([
-            axios.get('/api/students/profile'),
-            axios.get('/api/scholarships/recommended'),
-            axios.get('/api/saved')
+            api.get('/students/profile'),
+            api.get('/scholarships/recommended'),
+            api.get('/saved')
         ]);
 
         if (profileRes.status === 'fulfilled') {
@@ -73,7 +73,7 @@ export default function Dashboard() {
     e.preventDefault();
     e.stopPropagation();
     try {
-        await axios.delete(`/api/saved/${scholarshipId}`);
+        await api.delete(`/saved/${scholarshipId}`);
         // Optimistically remove from state
         setSavedScholarships(prev => {
             const updated = prev.filter(s => s.id !== scholarshipId);

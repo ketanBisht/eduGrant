@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api';
 import { Search, Loader2, Sparkles, Filter, X, ChevronDown, ArrowUpDown, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import ScholarshipCard from '../components/ScholarshipCard';
 import '../styles/Scholarships.css';
@@ -69,11 +69,11 @@ export default function ScholarshipList() {
             let pages = 1;
 
             if (view === 'matches') {
-                const res = await axios.get('/api/scholarships/recommended');
+                const res = await api.get('/scholarships/recommended');
                 resData = res.data.data || [];
                 totalItems = res.data.totalMatches || resData.length;
             } else if (view === 'saved' || view === 'urgent') {
-                const savedRes = await axios.get('/api/saved').catch(() => null);
+                const savedRes = await api.get('/saved').catch(() => null);
                 let savedList = savedRes?.data?.data || [];
                 if (view === 'urgent') {
                     savedList = savedList.filter(s => s.isUrgent);
@@ -82,7 +82,7 @@ export default function ScholarshipList() {
                 totalItems = savedList.length;
             } else {
                 const range = AMOUNT_RANGES[filters.amountRange];
-                const res = await axios.get('/api/scholarships', {
+                const res = await api.get('/scholarships', {
                     params: {
                         keyword: filters.keyword || undefined,
                         source: filters.source || undefined,
@@ -102,7 +102,7 @@ export default function ScholarshipList() {
                 pages = res.data.pagination.pages;
             }
 
-            const activeSavedRes = await axios.get('/api/saved').catch(() => null);
+            const activeSavedRes = await api.get('/saved').catch(() => null);
 
             setScholarships(resData);
             if (activeSavedRes && activeSavedRes.data.data) {
