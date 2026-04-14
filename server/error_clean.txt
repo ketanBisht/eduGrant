@@ -1,0 +1,36 @@
+
+Invalid `prisma.scholarship.findMany()` invocation:
+
+{
+  where: {
+    AND: [
+      {
+        OR: [
+          {
+            categoryEligible: {
+              has: "OBC"
+            }
+          },
+          {
+            categoryEligible: {
+              has: "All"
+            }
+          },
+          {
+            categoryEligible: {
+              isEmpty: true
+            }
+          },
+          {
+            categoryEligible: {
+              isSet: false
+            }
+          }
+        ]
+      }
+    ]
+  },
+  take: 50
+}
+
+Unknown argument `isSet`. Available options are marked with ?.

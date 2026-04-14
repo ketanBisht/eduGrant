@@ -12,6 +12,7 @@ body {
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  color-scheme: dark;
 }
 
 a {
@@ -78,11 +79,11 @@ button {
 
 /* Global Form Refresh - Un-Shitting browser defaults */
 input, select, textarea {
-  background: rgba(255, 255, 255, 0.03) !important;
+  background: var(--surface) !important;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid var(--border) !important;
   border-radius: var(--radius-xl) !important;
-  color: white !important;
+  color: var(--text-main) !important;
   padding: 1rem 1.25rem !important;
   font-size: 1rem !important;
   font-family: inherit;
@@ -113,8 +114,8 @@ select {
 }
 
 select option {
-  background-color: #0f172a;
-  color: white;
+  background-color: var(--surface) !important;
+  color: var(--text-main) !important;
 }
 
 label {

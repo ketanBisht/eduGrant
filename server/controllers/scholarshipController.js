@@ -1,3 +1,4 @@
+
 import prisma from "../config/prisma.js";
 import { 
   getAllScholarships as fetchScholarshipsFromService,
@@ -58,7 +59,7 @@ export const getAllScholarships = async (req, res) => {
           OR: [
             { categoryEligible: { has: category } },
             { categoryEligible: { has: 'All' } },
-            { categoryEligible: { equals: [] } }
+            { categoryEligible: { isEmpty: true } }
           ]
         }
       ];
@@ -209,7 +210,6 @@ export const getRecommendations = async (req, res) => {
     const where = {
       id: { notIn: appliedScholarshipIds },
       deadline: { gt: new Date() },
-      verificationStatus: "VERIFIED"
     };
 
     // Advanced Indian Eligibility Matching
@@ -220,7 +220,8 @@ export const getRecommendations = async (req, res) => {
       andFilters.push({
         OR: [
           { maxIncome: { gte: income } },
-          { maxIncome: null }
+          { maxIncome: null },
+          { maxIncome: { isSet: false } }
         ]
       });
     }
@@ -230,7 +231,8 @@ export const getRecommendations = async (req, res) => {
       andFilters.push({
         OR: [
           { minPercentage: { lte: academicPercentage } },
-          { minPercentage: null }
+          { minPercentage: null },
+          { minPercentage: { isSet: false } }
         ]
       });
     }
@@ -241,7 +243,7 @@ export const getRecommendations = async (req, res) => {
         OR: [
           { categoryEligible: { has: category } },
           { categoryEligible: { has: 'All' } },
-          { categoryEligible: { equals: [] } }
+          { categoryEligible: { isEmpty: true } }
         ]
       });
     }
@@ -252,7 +254,8 @@ export const getRecommendations = async (req, res) => {
         OR: [
           { state: { equals: state, mode: 'insensitive' } },
           { state: "All" },
-          { state: null }
+          { state: null },
+          { state: { isSet: false } }
         ]
       });
     }
@@ -263,7 +266,8 @@ export const getRecommendations = async (req, res) => {
         OR: [
           { gender: { equals: gender, mode: 'insensitive' } },
           { gender: "All" },
-          { gender: null }
+          { gender: null },
+          { gender: { isSet: false } }
         ]
       });
     }

@@ -12,8 +12,8 @@ import ScholarshipDetail from "./pages/ScholarshipDetail";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Vault from "./pages/Vault";
 import ProfileBuilder from "./pages/ProfileBuilder";
+import Vault from "./pages/Vault";
 
 function App() {
   return (

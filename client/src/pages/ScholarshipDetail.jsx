@@ -61,7 +61,7 @@ export default function ScholarshipDetail() {
         <div className="scholarship-page" style={{ maxWidth: 1100 }}>
             {/* Back */}
             <Link to="/scholarships" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: 'var(--text-secondary)', fontWeight: 600, marginBottom: '2rem', fontSize: '0.9rem', textDecoration: 'none', transition: 'color 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.color = 'white'}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--text-main)'}
                 onMouseLeave={e => e.currentTarget.style.color = 'var(--text-secondary)'}
             >
                 <ChevronLeft size={18}/> Back to Discovery Hub
@@ -105,7 +105,7 @@ export default function ScholarshipDetail() {
                 <span className={`source-tag ${scholarship.source?.toLowerCase()}`} style={{ marginBottom: '1rem', display: 'inline-block' }}>
                     {scholarship.source?.replace('_', ' ')}
                 </span>
-                <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.02em', color: 'white', margin: '0 0 1rem', lineHeight: 1.2 }}>
+                <h2 style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 900, letterSpacing: '-0.02em', color: 'var(--text-main)', margin: '0 0 1rem', lineHeight: 1.2 }}>
                     {scholarship.title}
                 </h2>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', alignItems: 'center' }}>
@@ -195,7 +195,7 @@ export default function ScholarshipDetail() {
                         {/* Award Amount */}
                         <div style={{ textAlign: 'center', padding: '1.5rem 0', borderBottom: '1px solid rgba(255,255,255,0.07)', marginBottom: '1.5rem' }}>
                             <p style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-secondary)', margin: '0 0 0.5rem' }}>Total Benefit</p>
-                            <p style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', margin: 0 }}>
+                            <p style={{ fontSize: '2.5rem', fontWeight: 900, color: 'var(--text-main)', margin: 0 }}>
                                 {scholarship.amount ? `₹${scholarship.amount.toLocaleString()}` : 'Variable'}
                             </p>
                         </div>
@@ -205,7 +205,7 @@ export default function ScholarshipDetail() {
                             <Calendar size={20} style={{ color: dl?.urgent ? dl.color : 'var(--primary)', flexShrink: 0 }}/>
                             <div style={{ flex: 1 }}>
                                 <p style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', margin: '0 0 2px' }}>Last Date</p>
-                                <p style={{ fontWeight: 800, color: dl?.urgent ? dl.color : 'white', margin: 0, fontSize: '0.95rem' }}>{formattedDeadline}</p>
+                                <p style={{ fontWeight: 800, color: dl?.urgent ? dl.color : 'var(--text-main)', margin: 0, fontSize: '0.95rem' }}>{formattedDeadline}</p>
                             </div>
                             {dl && <span style={{ fontSize: '0.7rem', fontWeight: 800, color: dl.color, textAlign: 'right', flexShrink: 0 }}>{dl.label}</span>}
                         </div>
@@ -268,7 +268,7 @@ function EligRow({ icon, label, value }) {
             <div style={{ flexShrink: 0, marginTop: 2 }}>{icon}</div>
             <div>
                 <span style={{ display: 'block', fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: 4 }}>{label}</span>
-                <span style={{ fontWeight: 700, color: 'white', fontSize: '0.9rem' }}>{value}</span>
+                <span style={{ fontWeight: 700, color: 'var(--text-main)', fontSize: '0.9rem' }}>{value}</span>
             </div>
         </div>
     );

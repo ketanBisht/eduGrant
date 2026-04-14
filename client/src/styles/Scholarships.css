@@ -40,10 +40,7 @@
     font-size: 3.5rem;
     font-weight: 800;
     letter-spacing: -0.04em;
-    background: linear-gradient(to bottom right, #fff, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
     margin-bottom: 1rem;
 }
 
@@ -55,30 +52,37 @@
 
 /* Glassmorphic Filters */
 .filters-bar {
-    background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    padding: 0.75rem;
-    border-radius: 100px;
-    border: 1px solid var(--border-glass);
+    background: transparent; /* Wrapper is now transparent, children have glass effect */
+    padding: 0;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-bottom: 3rem;
-    box-shadow: var(--shadow-premium);
+    gap: 0.75rem;
+    margin-bottom: 4rem;
 }
 
 .search-wrapper {
     flex: 1;
-    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0 1.25rem;
+    height: 48px;
 }
 
 .search-input {
-    background: transparent;
-    border: none;
-    color: white;
-    padding: 0.75rem 1rem 0.75rem 3rem;
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-main) !important;
+    padding: 0 0.5rem !important; /* Small padding since icon is a sibling now */
     width: 100%;
     font-size: 1rem;
+    height: 100%;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    margin: 0 !important;
 }
 
 .search-input:focus {
@@ -86,27 +90,97 @@
 }
 
 .search-icon {
-    position: absolute;
-    left: 1.25rem;
-    top: 50%;
-    transform: translateY(-50%);
     color: var(--primary);
+    flex-shrink: 0;
 }
 
 .filter-select {
-    background: var(--bg-surface-lighter);
-    color: white;
-    border: 1px solid var(--border-glass);
-    padding: 0.75rem 1.5rem;
-    border-radius: 100px;
+    background: var(--surface) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    padding: 0 1.5rem !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    border-radius: 100px !important;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .filter-select:hover {
-    border-color: var(--primary);
+    background: var(--surface-muted) !important;
+    border-color: var(--primary) !important;
 }
+
+.sort-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0 1rem;
+    height: 48px;
+    transition: all 0.2s;
+    min-width: fit-content;
+}
+
+.sort-icon {
+    color: var(--text-secondary);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.sort-select {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-main) !important;
+    font-weight: 600;
+    padding: 0 0.5rem 0 0.5rem !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    cursor: pointer;
+    appearance: none;
+    font-size: 0.9rem;
+    outline: none;
+    width: 100%;
+    margin: 0;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Expansion transition for list view */
+.scholarship-card.list-style {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scholarship-card.list-style:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.sort-select option {
+    background-color: #1e293b !important;
+    color: white !important;
+}
+
+/* Custom dropdown arrow for select */
+.sort-wrapper::after {
+    content: '▼';
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+    flex-shrink: 0;
+    margin-left: 0.25rem;
+}
+
 
 /* Premium Scholarship Grid */
 .scholarship-grid {
@@ -115,18 +189,40 @@
     gap: 2rem;
 }
 
+.scholarship-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+    margin-top: 1.5rem;
+}
+
 /* The Glass Card */
 .scholarship-card {
-    background: var(--grad-glass);
+    background: var(--surface);
     backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--border-glass);
-    border-radius: var(--radius-2xl);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
     padding: 2.5rem 2rem;
     display: flex;
     flex-direction: column;
-    height: 440px; /* Fixed uniform height */
     position: relative;
     box-shadow: var(--shadow-md);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.scholarship-card.list-style {
+    flex-direction: row;
+    padding: 2.25rem 2.75rem;
+    min-height: 110px;
+    align-items: center;
+    gap: 3rem;
+}
+
+.scholarship-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
 }
 
 .card-header-tags {
@@ -161,6 +257,7 @@
 
 .source-tag.government { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
 .source-tag.corporate_csr { background: rgba(99, 102, 241, 0.1); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.2); }
+.source-tag.ngo { background: rgba(16, 185, 129, 0.1); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); }
 
 .card-body {
     flex: 1;
@@ -173,7 +270,7 @@
     font-size: 1.5rem;
     font-weight: 800;
     line-height: 1.25;
-    color: white;
+    color: var(--text-main);
     margin: 0;
 }
 
@@ -214,7 +311,7 @@
 .metric-value {
     font-size: 1.75rem;
     font-weight: 900;
-    color: white;
+    color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -373,13 +470,40 @@
     to { opacity: 1; transform: scale(1); }
 }
 
+/* List Item Specific Elements */
+.card-content-main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.card-expand-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.list-deadline-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+}
+
+.list-deadline-fill {
+    height: 100%;
+    transition: width 1s ease-out;
+}
+
 /* ==============================
    Rich Filter System Extensions
    ============================== */
 
 .filter-select.w-full {
     width: 100%;
-    border-radius: var(--radius-lg);
 }
 
 .empty-state {
@@ -389,7 +513,7 @@
 .empty-state h3 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: white;
+    color: var(--text-main);
     margin-bottom: 0.5rem;
 }
 
@@ -423,9 +547,9 @@ button:disabled {
    Scholarship Detail Page
    ============================== */
 .section-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(255,255,255,0.07);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 20px;
     padding: 1.75rem;
-    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-sm);
 }

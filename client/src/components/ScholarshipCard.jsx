@@ -21,6 +21,7 @@ function getDeadlineUrgency(deadline) {
 export default function ScholarshipCard({ scholarship, isInitiallySaved = false }) {
     const [isSaved, setIsSaved] = useState(isInitiallySaved);
     const [saving, setSaving] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
     const title    = scholarship.title    || 'Untitled Scheme';
     const provider = scholarship.provider || 'Verified Provider';
@@ -30,8 +31,6 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
         : 'Always Open';
     const source   = scholarship.source   || 'GOVERNMENT';
     const urgency  = getDeadlineUrgency(scholarship.deadline);
-
-    const isMatch = scholarship.amount > 15000 || source === 'GOVERNMENT';
 
     const handleSave = async (e) => {
         e.preventDefault();
@@ -43,11 +42,11 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
             if (isSaved) {
                 await axios.delete(`/api/saved/${scholarship.id}`);
                 setIsSaved(false);
-                toast.success('Removed from bookmarks');
+                toast.success('Scholarship Unsaved');
             } else {
                 await axios.post('/api/saved', { scholarshipId: scholarship.id });
                 setIsSaved(true);
-                toast.success('Saved to bookmarks');
+                toast.success('Scholarship Saved');
             }
         } catch (err) {
             console.error('Error toggling save:', err);
@@ -59,18 +58,23 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
 
     return (
         <motion.div
-            className="scholarship-card"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -6, transition: { duration: 0.2 } }}
+            className="scholarship-card list-style"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             transition={{ duration: 0.4 }}
-            style={{ display: 'flex', flexDirection: 'column', height: 'auto', minHeight: 400 }}
+            style={{ 
+                height: isHovered ? 'auto' : '100px',
+                padding: isHovered ? '2rem' : '1.5rem 2rem'
+            }}
         >
             {/* Deadline urgency bar at top */}
             {urgency && (
-                <div style={{ position: 'relative', height: 4, background: 'rgba(255,255,255,0.06)', borderRadius: '16px 16px 0 0', overflow: 'hidden', marginBottom: 0, marginTop: -1 }}>
+                <div className="list-deadline-bar">
                     <motion.div
-                        style={{ height: '100%', background: urgency.color, borderRadius: 4 }}
+                        className="list-deadline-fill"
+                        style={{ background: urgency.color }}
                         initial={{ width: 0 }}
                         animate={{ width: `${urgency.pct}%` }}
                         transition={{ duration: 1, ease: 'easeOut' }}
@@ -78,65 +82,55 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
                 </div>
             )}
 
-            <div className="card-header-tags">
-                <span className={`source-tag ${source.toLowerCase()}`}>
-                    {source.replace('_', ' ')}
-                </span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    {urgency?.urgent && (
-                        <span style={{
-                            display: 'flex', alignItems: 'center', gap: 4,
-                            background: 'rgba(239,68,68,0.15)', color: '#f87171',
-                            padding: '3px 8px', borderRadius: 6,
-                            fontSize: '0.65rem', fontWeight: 800, border: '1px solid rgba(239,68,68,0.3)'
-                        }}>
-                            <AlertTriangle size={10}/> {urgency.label}
+            <div className="card-content-main">
+                {/* Left Section: Identity */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <h3 className="card-title" style={{ fontSize: '1.2rem', marginBottom: 0 }}>{title}</h3>
+                        <span className={`source-tag ${source.toLowerCase()}`} style={{ fontSize: '0.6rem', padding: '2px 6px' }}>
+                            {source.replace('_', ' ')}
                         </span>
-                    )}
-                    {isMatch && (
-                        <div className="match-tag">
-                            <Zap size={10} fill="currentColor"/> Smart Match
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div className="card-body" style={{ flex: 1 }}>
-                <h3 className="card-title line-clamp-3">{title}</h3>
-                <div className="provider-info">
-                    <Building2 size={14} className="text-primary"/>
-                    <span>{provider}</span>
-                    {source === 'GOVERNMENT' && (
-                        <ShieldCheck size={14} className="text-primary" style={{ marginLeft: 'auto' }} title="Official Registry"/>
-                    )}
-                </div>
-
-                <div className="card-metrics">
-                    <div className="metric">
-                        <span className="metric-label">Benefit</span>
-                        <span className="metric-value" style={{ fontSize: '1.4rem' }}>{amount}</span>
                     </div>
-                    <div className="metric text-right">
-                        <span className="metric-label">Closes</span>
-                        <span className="metric-value" style={{ fontSize: '0.9rem', justifyContent: 'flex-end', color: urgency?.urgent ? '#f87171' : 'white' }}>
+                    <div className="provider-info" style={{ fontSize: '0.8rem' }}>
+                        <Building2 size={12} className="text-primary"/>
+                        <span>{provider}</span>
+                    </div>
+                </div>
+
+                {/* Right Section: Metrics */}
+                <div className="card-metrics" style={{ borderTop: 'none', paddingTop: 0, paddingRight: '1rem', width: 'auto', gap: '3rem' }}>
+                    <div className="metric">
+                        <span className="metric-label" style={{ marginBottom: '2px' }}>Benefit</span>
+                        <span className="metric-value" style={{ fontSize: '1.25rem' }}>{amount}</span>
+                    </div>
+                    <div className="metric">
+                        <span className="metric-label" style={{ marginBottom: '2px' }}>Closes</span>
+                        <span className="metric-value" style={{ fontSize: '0.85rem', color: urgency?.urgent ? '#f87171' : 'var(--text-main)' }}>
                             <Clock size={12} style={{ color: urgency?.urgent ? '#f87171' : 'var(--secondary)' }}/> {deadline}
                         </span>
                     </div>
                 </div>
-            </div>
 
-            <div className="card-footer">
-                <button 
-                    className={`icon-btn hover:bg-white/5 ${isSaved ? 'text-primary' : ''}`} 
-                    onClick={handleSave}
-                    disabled={saving}
+                {/* Action Reveal */}
+                <motion.div 
+                    className="card-footer"
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : 20 }}
+                    style={{ margin: 0, pointerEvents: isHovered ? 'auto' : 'none' }}
                 >
-                    <Bookmark size={18} fill={isSaved ? "currentColor" : "none"}/>
-                </button>
-                <Link to={scholarship.id ? `/scholarships/${scholarship.id}` : '#'} className="apply-btn">
-                    <span>View Details</span>
-                    <ChevronRight size={16}/>
-                </Link>
+                    <button 
+                        className={`icon-btn hover:bg-black/5 dark:hover:bg-white/5 ${isSaved ? 'text-primary' : ''}`} 
+                        onClick={handleSave}
+                        disabled={saving}
+                        style={{ width: '40px', height: '40px' }}
+                    >
+                        <Bookmark size={16} fill={isSaved ? "currentColor" : "none"} />
+                    </button>
+                    <Link to={scholarship.id ? `/scholarships/${scholarship.id}` : '#'} className="apply-btn" style={{ height: '40px', padding: '0 1.25rem', fontSize: '0.9rem' }}>
+                        <span>View</span>
+                        <ChevronRight size={14}/>
+                    </Link>
+                </motion.div>
             </div>
         </motion.div>
     );

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Search, Loader2, Sparkles, Filter, X, ChevronDown, ArrowUpDown, SlidersHorizontal } from 'lucide-react';
+import { Search, Loader2, Sparkles, Filter, X, ChevronDown, ArrowUpDown, SlidersHorizontal, ArrowLeft } from 'lucide-react';
 import ScholarshipCard from '../components/ScholarshipCard';
 import '../styles/Scholarships.css';
 
@@ -16,7 +17,7 @@ const INDIAN_STATES = [
 const SORT_OPTIONS = [
     { label: 'Newest First', value: 'createdAt', order: 'desc' },
     { label: 'Highest Amount', value: 'amount', order: 'desc' },
-    { label: 'Deadline Soon', value: 'deadline', order: 'asc' },
+    { label: 'Nearest Deadline', value: 'deadline', order: 'asc' },
     { label: 'Best Match', value: 'relevance', order: 'desc' },
 ];
 
@@ -40,6 +41,10 @@ const DEFAULT_FILTERS = {
 };
 
 export default function ScholarshipList() {
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
+    const view = searchParams.get('view');
+
     const [filters, setFilters] = useState(DEFAULT_FILTERS);
     const [scholarships, setScholarships] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -48,6 +53,7 @@ export default function ScholarshipList() {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [showFilters, setShowFilters] = useState(false);
+    const [savedIds, setSavedIds] = useState(new Set());
     const LIMIT = 12;
 
     const activeFilterCount = [
@@ -58,25 +64,52 @@ export default function ScholarshipList() {
         try {
             setLoading(true);
             setError('');
-            const range = AMOUNT_RANGES[filters.amountRange];
-            const res = await axios.get('/api/scholarships', {
-                params: {
-                    keyword: filters.keyword || undefined,
-                    source: filters.source || undefined,
-                    category: filters.category || undefined,
-                    state: filters.state || undefined,
-                    gender: filters.gender || undefined,
-                    minAmount: range.min || undefined,
-                    maxAmount: range.max || undefined,
-                    sortBy: filters.sortBy,
-                    sortOrder: filters.sortOrder,
-                    page: currentPage,
-                    limit: LIMIT,
+            let resData = [];
+            let totalItems = 0;
+            let pages = 1;
+
+            if (view === 'matches') {
+                const res = await axios.get('/api/scholarships/recommended');
+                resData = res.data.data || [];
+                totalItems = res.data.totalMatches || resData.length;
+            } else if (view === 'saved' || view === 'urgent') {
+                const savedRes = await axios.get('/api/saved').catch(() => null);
+                let savedList = savedRes?.data?.data || [];
+                if (view === 'urgent') {
+                    savedList = savedList.filter(s => s.isUrgent);
                 }
-            });
-            setScholarships(res.data.data);
-            setTotal(res.data.pagination.total);
-            setTotalPages(res.data.pagination.pages);
+                resData = savedList;
+                totalItems = savedList.length;
+            } else {
+                const range = AMOUNT_RANGES[filters.amountRange];
+                const res = await axios.get('/api/scholarships', {
+                    params: {
+                        keyword: filters.keyword || undefined,
+                        source: filters.source || undefined,
+                        category: filters.category || undefined,
+                        state: filters.state || undefined,
+                        gender: filters.gender || undefined,
+                        minAmount: range.min || undefined,
+                        maxAmount: range.max || undefined,
+                        sortBy: filters.sortBy,
+                        sortOrder: filters.sortOrder,
+                        page: currentPage,
+                        limit: LIMIT,
+                    }
+                });
+                resData = res.data.data || [];
+                totalItems = res.data.pagination.total;
+                pages = res.data.pagination.pages;
+            }
+
+            const activeSavedRes = await axios.get('/api/saved').catch(() => null);
+
+            setScholarships(resData);
+            if (activeSavedRes && activeSavedRes.data.data) {
+                setSavedIds(new Set(activeSavedRes.data.data.map(s => s.id)));
+            }
+            setTotal(totalItems);
+            setTotalPages(pages);
             setPage(currentPage);
         } catch (err) {
             console.error("Fetch error:", err);
@@ -91,7 +124,7 @@ export default function ScholarshipList() {
         const delay = filters.keyword ? 450 : 0;
         const timer = setTimeout(() => fetchScholarships(1), delay);
         return () => clearTimeout(timer);
-    }, [filters, fetchScholarships]);
+    }, [filters, fetchScholarships, view]);
 
     const handleFilterChange = (key, value) => {
         setFilters(prev => ({ ...prev, [key]: value }));
@@ -107,14 +140,15 @@ export default function ScholarshipList() {
         <div className="scholarship-page">
             {/* Hero */}
             <header className="hero-banner">
+                {view && (
+                    <button onClick={() => navigate('/scholarships')} className="flex items-center gap-2 text-primary font-bold mb-4 hover:underline">
+                        <ArrowLeft size={16} /> Back to Full Discovery
+                    </button>
+                )}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                     <div className="page-title">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Sparkles className="text-secondary" size={24} />
-                            <span className="text-secondary font-bold tracking-widest uppercase text-xs">Official Portal 2025</span>
-                        </div>
-                        <h2>Discovery Hub</h2>
-                        <p>Verified government schemes, CSR grants, and private foundation awards in one secure vault.</p>
+                        <h2>{ view === 'matches' ? 'Smart Matches' : view === 'saved' ? 'Saved Scholarships' : view === 'urgent' ? 'Closing Soon' : 'Discovery Hub' }</h2>
+                        <p>{ view === 'matches' ? 'Scholarships tailored exactly to your verified profile.' : view === 'saved' ? 'Your personal vault of bookmarked opportunities.' : view === 'urgent' ? 'Act fast! These matched and saved scholarships are expiring soon.' : 'Verified government schemes, CSR grants, and private foundation awards in one secure vault.' }</p>
                     </div>
                     <div className="flex flex-col items-end gap-2">
                         <div className="text-4xl font-black text-primary">{total.toLocaleString()}</div>
@@ -123,8 +157,9 @@ export default function ScholarshipList() {
                 </div>
             </header>
 
-            {/* Search + Sort Bar */}
-            <div className="filters-bar mb-4">
+            {/* Search + Sort Bar (Hidden on special views) */}
+            {!view && (
+                <div className="filters-bar mb-4">
                 <div className="search-wrapper">
                     <Search className="search-icon" size={20} />
                     <input
@@ -138,22 +173,22 @@ export default function ScholarshipList() {
                 </div>
 
                 {/* Sort */}
-                <div className="flex items-center gap-2 pr-2 shrink-0">
-                    <ArrowUpDown className="text-text-muted" size={16} />
-                    <select
-                        id="sort-select"
-                        className="filter-select"
-                        value={filters.sortBy}
-                        onChange={(e) => {
-                            const opt = SORT_OPTIONS.find(o => o.value === e.target.value);
-                            if (opt) handleSort(opt);
-                        }}
-                    >
-                        {SORT_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                    </select>
-                </div>
+                    <div className="sort-wrapper">
+                        <ArrowUpDown className="sort-icon" size={16} />
+                        <select
+                            id="sort-select"
+                            className="sort-select"
+                            value={filters.sortBy}
+                            onChange={(e) => {
+                                const opt = SORT_OPTIONS.find(o => o.value === e.target.value);
+                                if (opt) handleSort(opt);
+                            }}
+                        >
+                            {SORT_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
 
                 {/* Filter Toggle */}
                 <button
@@ -161,7 +196,7 @@ export default function ScholarshipList() {
                     type="button"
                     onClick={() => setShowFilters(prev => !prev)}
                     className="filter-select flex items-center gap-2 shrink-0"
-                    style={{ background: activeFilterCount > 0 ? 'rgba(16,185,129,0.15)' : undefined, borderColor: activeFilterCount > 0 ? 'var(--primary)' : undefined, color: activeFilterCount > 0 ? 'var(--primary)' : 'white' }}
+                    style={{ background: activeFilterCount > 0 ? 'rgba(16,185,129,0.15)' : undefined, borderColor: activeFilterCount > 0 ? 'var(--primary)' : undefined, color: activeFilterCount > 0 ? 'var(--primary)' : 'var(--text-main)' }}
                 >
                     <SlidersHorizontal size={16} />
                     Filters
@@ -173,77 +208,83 @@ export default function ScholarshipList() {
                     <ChevronDown size={14} style={{ transform: showFilters ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
                 </button>
             </div>
+            )}
 
             {/* Expanded Filter Panel */}
             {showFilters && (
-                <div className="glass-card p-8 mb-8" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem', alignItems: 'end' }}>
-                    {/* Source */}
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Source</label>
-                        <select id="source-filter" className="filter-select w-full" value={filters.source} onChange={e => handleFilterChange('source', e.target.value)}>
-                            <option value="">All Sources</option>
-                            <option value="GOVERNMENT">Govt / NSP</option>
-                            <option value="CORPORATE_CSR">Corporate / CSR</option>
-                        </select>
+                <div className="glass-card" style={{ padding: '2rem 2.5rem', marginBottom: '2rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: '1.5rem', alignItems: 'end' }}>
+                        {/* Source */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Source</label>
+                            <select id="source-filter" className="filter-select w-full" value={filters.source} onChange={e => handleFilterChange('source', e.target.value)}>
+                                <option value="">All Sources</option>
+                                <option value="GOVERNMENT">Govt / NSP</option>
+                                <option value="CORPORATE_CSR">Corporate / CSR</option>
+                                <option value="NGO">Non-Profit / NGO</option>
+                            </select>
+                        </div>
+
+                        {/* Caste / Category */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Caste / Category</label>
+                            <select id="category-filter" className="filter-select w-full" value={filters.category} onChange={e => handleFilterChange('category', e.target.value)}>
+                                <option value="">All Categories</option>
+                                <option value="General">General</option>
+                                <option value="OBC">OBC</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="EWS">EWS</option>
+                            </select>
+                        </div>
+
+                        {/* State */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Domicile State</label>
+                            <select id="state-filter" className="filter-select w-full" value={filters.state} onChange={e => handleFilterChange('state', e.target.value)}>
+                                <option value="">All States</option>
+                                {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                        </div>
+
+                        {/* Gender */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Gender</label>
+                            <select id="gender-filter" className="filter-select w-full" value={filters.gender} onChange={e => handleFilterChange('gender', e.target.value)}>
+                                <option value="">Any Gender</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                            </select>
+                        </div>
+
+                        {/* Amount Range */}
+                        <div>
+                            <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Award Amount</label>
+                            <select id="amount-filter" className="filter-select w-full" value={filters.amountRange} onChange={e => handleFilterChange('amountRange', parseInt(e.target.value))}>
+                                {AMOUNT_RANGES.map((r, i) => <option key={i} value={i}>{r.label}</option>)}
+                            </select>
+                        </div>
                     </div>
 
-                    {/* Caste / Category */}
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Caste / Category</label>
-                        <select id="category-filter" className="filter-select w-full" value={filters.category} onChange={e => handleFilterChange('category', e.target.value)}>
-                            <option value="">All Categories</option>
-                            <option value="General">General</option>
-                            <option value="OBC">OBC</option>
-                            <option value="SC">SC</option>
-                            <option value="ST">ST</option>
-                            <option value="EWS">EWS</option>
-                        </select>
-                    </div>
-
-                    {/* State */}
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Domicile State</label>
-                        <select id="state-filter" className="filter-select w-full" value={filters.state} onChange={e => handleFilterChange('state', e.target.value)}>
-                            <option value="">All States</option>
-                            {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                        </select>
-                    </div>
-
-                    {/* Gender */}
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Gender</label>
-                        <select id="gender-filter" className="filter-select w-full" value={filters.gender} onChange={e => handleFilterChange('gender', e.target.value)}>
-                            <option value="">Any Gender</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select>
-                    </div>
-
-                    {/* Amount Range */}
-                    <div>
-                        <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Award Amount</label>
-                        <select id="amount-filter" className="filter-select w-full" value={filters.amountRange} onChange={e => handleFilterChange('amountRange', parseInt(e.target.value))}>
-                            {AMOUNT_RANGES.map((r, i) => <option key={i} value={i}>{r.label}</option>)}
-                        </select>
-                    </div>
-
-                    {/* Clear */}
+                    {/* Footer Actions */}
                     {activeFilterCount > 0 && (
-                        <button
-                            id="clear-filters-btn"
-                            type="button"
-                            onClick={clearAll}
-                            className="flex items-center gap-2 text-red-400 hover:text-red-300 font-bold text-sm transition-colors"
-                        >
-                            <X size={16} /> Clear All Filters
-                        </button>
+                        <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'flex-end' }}>
+                            <button
+                                id="clear-filters-btn"
+                                type="button"
+                                onClick={clearAll}
+                                className="flex items-center gap-2 text-red-500 hover:text-red-600 font-bold text-sm transition-colors"
+                            >
+                                <X size={16} /> Clear All Filters
+                            </button>
+                        </div>
                     )}
                 </div>
             )}
 
             {/* Active Filter Chips */}
-            {activeFilterCount > 0 && (
-                <div className="flex flex-wrap gap-2 mb-6">
+            {!view && activeFilterCount > 0 && (
+                <div className="flex flex-wrap gap-2" style={{ marginTop: '1.5rem', marginBottom: '2rem' }}>
                     {filters.source && <FilterChip label={filters.source.replace('_', ' ')} onRemove={() => handleFilterChange('source', '')} />}
                     {filters.category && <FilterChip label={`Caste: ${filters.category}`} onRemove={() => handleFilterChange('category', '')} />}
                     {filters.state && <FilterChip label={filters.state} onRemove={() => handleFilterChange('state', '')} />}
@@ -252,8 +293,8 @@ export default function ScholarshipList() {
                 </div>
             )}
 
-            {/* Grid */}
-            <main className="scholarship-grid">
+            {/* List View */}
+            <main className="scholarship-list">
                 {loading ? (
                     <div className="flex flex-col justify-center items-center py-24 col-span-full gap-4">
                         <Loader2 className="animate-spin text-primary" size={48} />
@@ -276,23 +317,28 @@ export default function ScholarshipList() {
                     </div>
                 ) : (
                     scholarships.map((scholarship) => (
-                        <ScholarshipCard key={scholarship.id} scholarship={scholarship} />
+                        <ScholarshipCard 
+                            key={scholarship.id} 
+                            scholarship={scholarship} 
+                            isInitiallySaved={savedIds.has(scholarship.id)} 
+                        />
                     ))
                 )}
             </main>
 
             {/* Pagination */}
             {!loading && !error && totalPages > 1 && (
-                <div className="flex justify-center items-center gap-3 mt-12">
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '1.5rem', marginTop: '3rem', width: '100%' }}>
                     <button
                         id="prev-page-btn"
                         disabled={page === 1}
                         onClick={() => fetchScholarships(page - 1)}
                         className="filter-select disabled:opacity-40"
+                        style={{ minWidth: '120px' }}
                     >
                         ← Prev
                     </button>
-                    <span className="text-text-muted font-bold">
+                    <span className="text-text-muted font-bold" style={{ whiteSpace: 'nowrap', fontSize: '1.1rem' }}>
                         Page {page} of {totalPages}
                     </span>
                     <button
@@ -300,6 +346,7 @@ export default function ScholarshipList() {
                         disabled={page === totalPages}
                         onClick={() => fetchScholarships(page + 1)}
                         className="filter-select disabled:opacity-40"
+                        style={{ minWidth: '120px' }}
                     >
                         Next →
                     </button>

@@ -9,9 +9,9 @@ import "./Dashboard.css";
 export default function Dashboard() {
   const { user, isLoaded } = useUser();
   const [stats, setStats] = useState([
-    { label: "Matches Found", value: "0", icon: Zap },
-    { label: "Saved", value: "0", icon: Bookmark },
-    { label: "Closing Soon", value: "0", icon: Clock },
+    { label: "Matches Found", value: "0", icon: Zap, path: "/scholarships?view=matches", isClickable: true },
+    { label: "Saved", value: "0", icon: Bookmark, path: "/scholarships?view=saved", isClickable: true },
+    { label: "Closing Soon", value: "0", icon: Clock, path: "/scholarships?view=urgent", isClickable: true },
   ]);
   const [profile, setProfile] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
@@ -42,7 +42,7 @@ export default function Dashboard() {
         let recommendationsList = [];
         if (recsRes.status === 'fulfilled') {
             const recs = recsRes.value.data.data || [];
-            recommendationsList = recs.slice(0, 3);
+            recommendationsList = recs.slice(0, 4);
             setRecommendations(recommendationsList);
             totalMatches = recsRes.value.data.totalMatches?.toString() || recs.length.toString();
         }
@@ -57,15 +57,37 @@ export default function Dashboard() {
         }
 
         setStats([
-            { label: "Matches Found", value: totalMatches, icon: Zap },
-            { label: "Saved", value: savedList.length.toString(), icon: Bookmark },
-            { label: "Closing Soon", value: urgentCount, icon: Clock },
+            { label: "Matches Found", value: totalMatches, icon: Zap, path: "/scholarships?view=matches", isClickable: true },
+            { label: "Saved", value: savedList.length.toString(), icon: Bookmark, path: "/scholarships?view=saved", isClickable: true },
+            { label: "Closing Soon", value: urgentCount, icon: Clock, path: "/scholarships?view=urgent", isClickable: true },
         ]);
 
     } catch (e) {
         console.error("Dashboard data fetch error:", e);
     } finally {
         setLoading(false);
+    }
+  };
+
+  const handleUnsave = async (e, scholarshipId) => {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+        await axios.delete(`/api/saved/${scholarshipId}`);
+        // Optimistically remove from state
+        setSavedScholarships(prev => {
+            const updated = prev.filter(s => s.id !== scholarshipId);
+            // Update stats
+            setStats(currStats => {
+                const newStats = [...currStats];
+                newStats[1].value = updated.length.toString();
+                newStats[2].value = updated.filter(s => s.isUrgent).length.toString();
+                return newStats;
+            });
+            return updated;
+        });
+    } catch (e) {
+        console.error("Failed to unsave scholarship:", e);
     }
   };
 
@@ -119,36 +141,65 @@ export default function Dashboard() {
       {/* Welcome Section */}
       <motion.div className="welcome-section" variants={itemVariants}>
         <div className="welcome-text">
-            <h2>Hello, {user?.firstName || profile?.name || "Student"}! 👋</h2>
-            <p>
+            <h2>My Dashboard</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                <span style={{ 
+                    background: 'rgba(16, 185, 129, 0.15)', 
+                    color: 'var(--primary)', 
+                    padding: '4px 10px', 
+                    borderRadius: '100px', 
+                    fontSize: '10px', 
+                    fontWeight: '800', 
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                    border: '1px solid rgba(16, 185, 129, 0.2)'
+                }}>
+                    Official Verified Profile
+                </span>
+            </div>
+            <p style={{ maxWidth: '600px', opacity: 0.9 }}>
                 {completionRate < 100 
-                    ? `Your profile is ${completionRate}% complete. Complete it to unlock all matches.`
-                    : "Your profile is fully verified and helping us find the best official matches."}
+                    ? `Your profile is ${completionRate}% complete. Fill in your details to unlock personalized scholarship matches tailored to you.`
+                    : "Your profile is fully verified and our smart engine is finding the best matches for you."}
             </p>
         </div>
-        <Link to={completionRate < 100 ? "/profile-builder" : "/scholarships"} className="vault-cta">
-            <Zap size={16} /> {completionRate < 100 ? "Complete Profile" : "View Matches"}
-        </Link>
       </motion.div>
 
       {/* Stats Grid */}
       <div className="stats-grid">
-        {stats.map((stat, index) => (
-          <motion.div 
-            key={index} 
-            className="stat-card"
-            variants={itemVariants}
-            whileHover={{ y: -5, transition: { duration: 0.2 } }}
-          >
-            <div className="stat-icon">
-              <stat.icon size={24} />
-            </div>
-            <div className="stat-info">
-              <h3>{stat.label}</h3>
-              <div className="stat-value">{stat.value}</div>
-            </div>
-          </motion.div>
-        ))}
+        {stats.map((stat, index) => {
+          const isMatchCard = stat.label === "Matches Found";
+          const hasMatches = parseInt(stat.value) > 0;
+          
+          const content = (
+            <motion.div 
+              className={`stat-card ${stat.isClickable ? 'clickable' : ''} ${isMatchCard && hasMatches ? 'match-active' : ''}`}
+              variants={itemVariants}
+              whileHover={stat.isClickable ? { y: -8 } : {}}
+            >
+              <div className="stat-icon" style={isMatchCard && hasMatches ? { background: 'rgba(16, 185, 129, 0.2)' } : {}}>
+                <stat.icon size={24} />
+              </div>
+              <div className="stat-info">
+                <h3>{stat.label}</h3>
+                <div className="stat-value" style={isMatchCard && hasMatches ? { color: 'var(--primary)' } : {}}>{stat.value}</div>
+              </div>
+              {stat.isClickable && (
+                <div style={{ position: 'absolute', bottom: '1.5rem', right: '1.5rem' }}>
+                    <ChevronRight size={16} className="text-text-muted opacity-50" />
+                </div>
+              )}
+            </motion.div>
+          );
+
+          return stat.path ? (
+            <Link key={index} to={stat.path} style={{ textDecoration: 'none' }}>
+              {content}
+            </Link>
+          ) : (
+            <div key={index}>{content}</div>
+          );
+        })}
       </div>
 
       {/* Dashboard Content Grid */}
@@ -157,7 +208,7 @@ export default function Dashboard() {
         <motion.div className="section-card" variants={itemVariants}>
           <div className="section-header">
             <h3><Zap size={18} className="text-emerald-500" /> Smart Recommendations</h3>
-            <Link to="/scholarships" className="view-all">
+            <Link to="/scholarships?view=matches" className="view-all">
               View All
             </Link>
           </div>
@@ -200,6 +251,9 @@ export default function Dashboard() {
         <motion.div className="section-card" variants={itemVariants}>
           <div className="section-header">
             <h3><Bookmark size={18} className="text-primary" /> Saved & Reminders</h3>
+            <Link to="/scholarships?view=saved" className="view-all">
+              View All
+            </Link>
           </div>
 
           <div className="scholarship-list">
@@ -214,52 +268,35 @@ export default function Dashboard() {
                         className={`scholarship-item ${item.isUrgent ? 'urgent-border' : ''}`}
                         whileHover={{ x: 5 }}
                     >
-                        <div className="item-info">
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                <h4>{item.title}</h4>
-                                {item.isUrgent && <span className="urgent-badge">Closing Soon</span>}
+                        <div className="item-info" style={{ minWidth: 0, paddingRight: '12px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '4px' }}>
+                                <h4 style={{ margin: 0, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                    {item.title}
+                                </h4>
+                                {item.isUrgent && <span className="urgent-badge shrink-0" style={{ whiteSpace: 'nowrap' }}>Closing Soon</span>}
                             </div>
                             <div className="item-meta">
                                 {item.urgencyStr} • ₹{item.amount?.toLocaleString()}
                             </div>
                         </div>
-                        <Link to={`/scholarships/${item.id}`} className="mini-btn">
-                            <ChevronRight size={16} />
-                        </Link>
+                        <div className="flex items-center gap-2 shrink-0">
+                            <button 
+                                onClick={(e) => handleUnsave(e, item.id)}
+                                className="mini-btn hover:text-red-500 hover:bg-red-500/10"
+                                title="Remove from saved"
+                            >
+                                <Bookmark size={16} fill="currentColor" className="text-primary hover:text-red-500 transition-colors" />
+                            </button>
+                            <Link to={`/scholarships/${item.id}`} className="mini-btn">
+                                <ChevronRight size={16} />
+                            </Link>
+                        </div>
                     </motion.div>
                 ))
             )}
           </div>
         </motion.div>
 
-        {/* Action Center */}
-        <motion.div className="section-card" variants={itemVariants}>
-          <div className="section-header">
-            <h3><TrendingUp size={18} /> Eligibility Insights</h3>
-          </div>
-
-          <div className="insight-card">
-            <h4 className="font-semibold text-sm mb-2">Profile Integrity</h4>
-
-            <div className="w-full rounded-full h-2 mb-2 bg-white/5 overflow-hidden">
-              <motion.div 
-                className="bg-emerald-500 h-2 rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: `${completionRate}%` }}
-                transition={{ duration: 1.5, ease: "easeOut" }}
-              ></motion.div>
-            </div>
-
-            <p className="text-xs text-text-muted">
-                {completionRate}% Profile Match Readiness
-            </p>
-          </div>
-          
-          <div className="mt-6 flex flex-col gap-3">
-              <Link to="/profile-builder" className="btn btn-secondary w-full text-sm text-center">Refine Eligibility Profile</Link>
-              <Link to="/vault" className="btn btn-primary w-full text-sm text-center">Open Document Vault</Link>
-          </div>
-        </motion.div>
       </div>
     </motion.div>
   );

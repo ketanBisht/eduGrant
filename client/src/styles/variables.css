@@ -7,14 +7,14 @@
   --secondary: #6366f1; /* Indigo 500 */
   --secondary-hover: #4f46e5;
 
-  --background: #f8fafc; /* Slate 50 */
-  --surface: #ffffff;
-  --surface-muted: #f1f5f9;
+  --background: #F0F9FF; /* Sky 50 - Energetic light blue base */
+  --surface: #FFFFFF; /* Keep solid white for clarity and pop */
+  --surface-muted: #E0F2FE; /* Sky 100 - Distinct boundaries */
   
-  --text-main: #0f172a; /* Slate 900 */
-  --text-muted: #64748b; /* Slate 500 */
+  --text-main: #0C4A6E; /* Sky 950 - Deep Navy/Blue for better harmony */
+  --text-muted: #475569; /* Slate 600 */
   
-  --border: #e2e8f0; /* Slate 200 */
+  --border: #BAE6FD; /* Sky 200 - Clearly defined borders */
   
   --success: #22c55e;
   --warning: #f59e0b;
@@ -26,12 +26,28 @@
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
 
   /* Typography */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Gradients */
+  --grad-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.4) 100%);
+  
+  /* Feature Icon Backgrounds (lower opacity for Light Theme) */
+  --bg-primary-muted: rgba(16, 185, 129, 0.12);
+  --bg-secondary-muted: rgba(99, 102, 241, 0.12);
+  --bg-warning-muted: rgba(245, 158, 11, 0.12);
+  
+  /* Specific Custom Hero Text */
+  --hero-grad-start: #2D9C8B;
+  --hero-grad-end: #4A6CF7;
+  
+  /* Glass Variables */
+  --border-glass: rgba(0, 0, 0, 0.1);
+  --glass-blur: 16px;
 }
 
 .dark {
@@ -50,6 +66,19 @@
   /* Gradients */
   --grad-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --grad-glass: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  
+  /* Feature Icon Backgrounds (high opacity for Dark Theme) */
+  --bg-primary-muted: rgba(16, 185, 129, 0.1);
+  --bg-secondary-muted: rgba(99, 102, 241, 0.1);
+  --bg-warning-muted: rgba(245, 158, 11, 0.1);
+  
+  /* Original Hero Text Colors */
+  --hero-grad-start: var(--primary);
+  --hero-grad-end: var(--secondary);
+
+  /* Glass Variables */
+  --border-glass: rgba(255, 255, 255, 0.1);
+  --glass-blur: 16px;
 
   /* Overriding greens for higher contrast on dark backgrounds */
   --primary: #10b981; 

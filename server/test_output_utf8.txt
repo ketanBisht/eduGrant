@@ -1,0 +1,5 @@
+Filter 1 (Income): 5
+Filter 2 (Percent): 4
+Filter 3 (Category): 5
+Filter 4 (State): 5
+Filter 5 (Gender): 6

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     User, GraduationCap, BookOpen, Wallet,
-    Phone, ChevronRight, ChevronLeft, ShieldCheck,
+    Phone, PhoneCall, ChevronRight, ChevronLeft, ShieldCheck,
     Sparkles, CheckCircle2, Loader2
 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -213,8 +213,8 @@ export default function ProfileBuilder() {
                                 <div className="pb-field">
                                     <label className="pb-label">WhatsApp Number</label>
                                     <div style={{ position:'relative' }}>
-                                        <Phone style={{ position:'absolute', left:16, top:'50%', transform:'translateY(-50%)', color:'var(--text-secondary)', width:18, height:18 }}/>
-                                        <input className="pb-input" style={{ paddingLeft:'3rem' }} type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} placeholder="10-digit number" maxLength={10}/>
+                                        <PhoneCall style={{ position:'absolute', left:16, top:'50%', transform:'translateY(-50%)', color:'var(--primary)', width:18, height:18, zIndex: 10 }}/>
+                                        <input className="pb-input pb-input-icon" type="tel" name="whatsapp" value={formData.whatsapp} onChange={handleChange} placeholder="10-digit number" maxLength={10}/>
                                     </div>
                                 </div>
                             </motion.div>

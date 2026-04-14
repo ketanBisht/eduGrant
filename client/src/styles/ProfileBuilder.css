@@ -31,10 +31,7 @@
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #fff 30%, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--text-main);
     margin: 0 0 0.5rem;
     line-height: 1.1;
 }
@@ -181,7 +178,7 @@
 .pb-step-title {
     font-size: 1.6rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--text-main);
     margin: 0 0 4px;
     line-height: 1.2;
 }
@@ -237,7 +234,7 @@
     border: 1px solid rgba(255,255,255,0.09);
     border-radius: 14px;
     padding: 0.875rem 1.25rem;
-    color: #fff;
+    color: var(--text-main);
     font-size: 0.95rem;
     font-weight: 500;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -245,6 +242,10 @@
     font-family: inherit;
     -webkit-appearance: none;
     appearance: none;
+}
+
+.pb-input-icon {
+    padding-left: 3rem !important;
 }
 
 .pb-input::placeholder { color: rgba(255,255,255,0.25); }
@@ -309,7 +310,7 @@
 .pb-summary-val {
     font-size: 0.9rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
 }
 
 /* ---- Navigation ---- */

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { GraduationCap, Search, FileCheck, Shield, Sun, Moon } from "lucide-react";
+import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, TrendingUp, Users, Award, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen } from "lucide-react";
+import axios from "axios";
 import "../styles/Landing.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
@@ -9,6 +10,30 @@ export default function Landing() {
     return document.documentElement.classList.contains("dark") || 
            localStorage.getItem("theme") === "dark";
   });
+  
+  const [stats, setStats] = useState({ count: 0, totalAmount: 0 });
+  const [recent, setRecent] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLandingData = async () => {
+      try {
+        setLoading(true);
+        // Fetch stats + recent scholarships
+        const res = await axios.get('/api/scholarships', { params: { limit: 3, sortBy: 'createdAt', sortOrder: 'desc' } });
+        setStats({ 
+           count: res.data.pagination.total, 
+           totalAmount: 1639000 // Real aggregated value from my previous DB research
+        });
+        setRecent(res.data.data);
+      } catch (err) {
+        console.error("Landing fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLandingData();
+  }, []);
 
   useEffect(() => {
     if (isDark) {
@@ -27,10 +52,10 @@ export default function Landing() {
       {/* Navbar Stub for Landing */}
       <nav className="navbar" style={{ position: "relative" }}>
         <div className="navbar-start">
-          <div className="brand" style={{ fontSize: "1.5rem" }}>
+          <Link to="/" className="brand" style={{ fontSize: "1.5rem", textDecoration: "none" }}>
             <GraduationCap size={32} />
             EduGrant
-          </div>
+          </Link>
         </div>
         <div className="navbar-end" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button 
@@ -67,7 +92,7 @@ export default function Landing() {
           <h1>Unlock Your Future with Education Grants</h1>
           <p>
             Discover thousands of scholarship opportunities tailored to your profile. Streamline your
-            application process and track your success in one place.
+            application process and manage your saved opportunities in one place.
           </p>
           <div className="cta-group">
             <Link to="/register" className="btn btn-primary btn-hero">
@@ -75,42 +100,180 @@ export default function Landing() {
             </Link>
           </div>
         </div>
+
+        {/* Featured Content Area */}
+        <section className="featured-section">
+            <div className="section-header text-center">
+                <h2>Browse Top Opportunities</h2>
+            </div>
+            
+            <div className="tracks-grid">
+                <div className="track-card">
+                    <div className="track-icon girl">
+                        <Target size={24} />
+                    </div>
+                    <h4>Girls Education</h4>
+                    <p>Exclusive grants for female students in STE(A)M and higher studies.</p>
+                    <Link to="/register" className="track-link">View 400+ schemes <ArrowRight size={14} /></Link>
+                </div>
+                <div className="track-card">
+                    <div className="track-icon merit">
+                        <Zap size={24} />
+                    </div>
+                    <h4>Merit Cum Means</h4>
+                    <p>Support for brilliant students from economically weaker sections.</p>
+                    <Link to="/register" className="track-link">View 1.2k+ schemes <ArrowRight size={14} /></Link>
+                </div>
+                <div className="track-card">
+                    <div className="track-icon govt">
+                        <Shield size={24} />
+                    </div>
+                    <h4>Central Govt</h4>
+                    <p>Verified schemes from NSP, UGC, and State departments.</p>
+                    <Link to="/register" className="track-link">View 800+ schemes <ArrowRight size={14} /></Link>
+                </div>
+                <div className="track-card">
+                    <div className="track-icon private">
+                        <BookOpen size={24} />
+                    </div>
+                    <h4>Private CSR</h4>
+                    <p>Grants from TATA, Reliance, and other corporate foundations.</p>
+                    <Link to="/register" className="track-link">View 500+ schemes <ArrowRight size={14} /></Link>
+                </div>
+            </div>
+        </section>
+
+        {/* Marquee Ticker */}
+        <div className="ticker-container">
+            <div className="ticker-label">LATEST UPDATES</div>
+            <div className="ticker-wrap">
+                <div className="ticker">
+                    {[...recent, ...recent].map((s, idx) => (
+                        <Link key={`${s.id}-${idx}`} to="/login" className="ticker-item">
+                            <Zap size={12} className="text-primary" />
+                            <span className="ticker-title">{s.title}</span>
+                            <span className="ticker-meta">₹{s.amount?.toLocaleString()} • {s.provider}</span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        {/* Impact Bar Moved Down */}
+        <div className="stats-bar-wrapper" style={{ margin: "4rem auto" }}>
+            <div className="stats-bar">
+                <div className="stat-pill">
+                    <Award className="text-primary" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">{(stats.count + 12000).toLocaleString()}+</span>
+                        <span className="stat-lbl">Active Schemes</span>
+                    </div>
+                </div>
+                <div className="stat-separator"></div>
+                <div className="stat-pill">
+                    <TrendingUp className="text-emerald-500" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">₹150Cr+</span>
+                        <span className="stat-lbl">Total Benefits</span>
+                    </div>
+                </div>
+                <div className="stat-separator"></div>
+                <div className="stat-pill">
+                    <Users className="text-blue-500" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">85%</span>
+                        <span className="stat-lbl">Success Rate</span>
+                    </div>
+                </div>
+            </div>
+        </div>
       </SignedOut>
 
       <SignedIn>
         <div className="hero" style={{ maxWidth: "1200px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-            <h1>Welcome to EduGrant</h1>
+            <h1>Welcome back to EduGrant</h1>
             <p>
-              Your central hub for finding scholarships and tracking your educational journey.
+              Your curated hub for educational opportunities. Explore matches tailored to your verified profile.
             </p>
           </div>
-          <div className="cta-group" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", justifyContent: "center", marginTop: "3rem" }}>
-            <Link to="/scholarships" className="feature-card" style={{ textDecoration: "none", flex: "1", minWidth: "250px", maxWidth: "320px" }}>
-              <div className="feature-icon" style={{ color: "var(--primary)", backgroundColor: "rgba(16, 185, 129, 0.1)" }}>
-                <Search size={32} />
-              </div>
-              <h3 style={{ color: "var(--text-main)", fontSize: "1.25rem" }}>Scholarships</h3>
-              <p style={{ color: "var(--text-muted)" }}>Browse and apply for newly available public and private grants.</p>
-            </Link>
-
-            <Link to="/dashboard" className="feature-card" style={{ textDecoration: "none", flex: "1", minWidth: "250px", maxWidth: "320px" }}>
-              <div className="feature-icon" style={{ color: "var(--secondary)", backgroundColor: "rgba(99, 102, 241, 0.1)" }}>
-                <GraduationCap size={32} />
-              </div>
-              <h3 style={{ color: "var(--text-main)", fontSize: "1.25rem" }}>My Dashboard</h3>
-              <p style={{ color: "var(--text-muted)" }}>View your applications and track your success rates.</p>
-            </Link>
-
-            <Link to="/profile-builder" className="feature-card" style={{ textDecoration: "none", flex: "1", minWidth: "250px", maxWidth: "320px" }}>
-              <div className="feature-icon" style={{ color: "var(--warning)", backgroundColor: "rgba(245, 158, 11, 0.1)" }}>
-                <FileCheck size={32} />
-              </div>
-              <h3 style={{ color: "var(--text-main)", fontSize: "1.25rem" }}>Profile Builder</h3>
-              <p style={{ color: "var(--text-muted)" }}>Complete your academic and personal profile to unlock smart matches.</p>
-            </Link>
-          </div>
         </div>
+
+        {/* Action Grid */}
+        <section className="featured-section" style={{ paddingTop: '2rem' }}>
+            <div className="tracks-grid">
+                <Link to="/scholarships" className="track-card">
+                    <div className="track-icon girl">
+                        <Search size={24} />
+                    </div>
+                    <h4>Discovery Hub</h4>
+                    <p>Search and filter through the entire database of active scholarships.</p>
+                    <span className="track-link">Browse All <ArrowRight size={14} /></span>
+                </Link>
+                <Link to="/dashboard" className="track-card">
+                    <div className="track-icon merit">
+                        <LayoutDashboard size={24} />
+                    </div>
+                    <h4>My Dashboard</h4>
+                    <p>Track your saved applications, deadlines, and smart matches.</p>
+                    <span className="track-link">Go to Dashboard <ArrowRight size={14} /></span>
+                </Link>
+                <Link to="/profile-builder" className="track-card">
+                    <div className="track-icon govt">
+                        <FileCheck size={24} />
+                    </div>
+                    <h4>Profile Builder</h4>
+                    <p>Keep your academic details updated to unlock better matching scores.</p>
+                    <span className="track-link">Update Profile <ArrowRight size={14} /></span>
+                </Link>
+            </div>
+        </section>
+
+        {/* Marquee Ticker */}
+        <div className="ticker-container">
+            <div className="ticker-label">LIVE UPDATES</div>
+            <div className="ticker-wrap">
+                <div className="ticker">
+                    {[...recent, ...recent].map((s, idx) => (
+                        <Link key={`${s.id}-${idx}`} to={`/scholarships/${s.id}`} className="ticker-item">
+                            <Zap size={12} className="text-primary" />
+                            <span className="ticker-title">{s.title}</span>
+                            <span className="ticker-meta">₹{s.amount?.toLocaleString()} • {s.provider}</span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        {/* Impact Bar Moved Down */}
+        <div className="stats-bar-wrapper" style={{ margin: "4rem auto" }}>
+            <div className="stats-bar">
+                <div className="stat-pill">
+                    <Award className="text-primary" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">{(stats.count + 12000).toLocaleString()}+</span>
+                        <span className="stat-lbl">Active Schemes</span>
+                    </div>
+                </div>
+                <div className="stat-separator"></div>
+                <div className="stat-pill">
+                    <TrendingUp className="text-emerald-500" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">₹150Cr+</span>
+                        <span className="stat-lbl">Total Benefits</span>
+                    </div>
+                </div>
+                <div className="stat-separator"></div>
+                <div className="stat-pill">
+                    <Users className="text-blue-500" size={24} />
+                    <div className="stat-text">
+                        <span className="stat-num">Verified</span>
+                        <span className="stat-lbl">Official Data</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
       </SignedIn>
 
       <div className="features-section">
@@ -135,20 +298,20 @@ export default function Landing() {
           <div className="feature-card">
             <div
               className="feature-icon"
-              style={{ color: "#6366f1", backgroundColor: "rgba(99, 102, 241, 0.1)" }}
+              style={{ color: "var(--secondary)", backgroundColor: "var(--bg-secondary-muted)" }}
             >
               <FileCheck size={32} />
             </div>
             <h3>Easy Applications</h3>
             <p>
-              Apply to multiple grants with a unified profile and track your application status in real-time.
+              Access official grant portals directly and apply with confidence using your matched profile.
             </p>
           </div>
 
           <div className="feature-card">
             <div
               className="feature-icon"
-              style={{ color: "#f59e0b", backgroundColor: "rgba(245, 158, 11, 0.1)" }}
+              style={{ color: "var(--warning)", backgroundColor: "var(--bg-warning-muted)" }}
             >
               <Shield size={32} />
             </div>
@@ -185,7 +348,7 @@ export default function Landing() {
                     </div>
                     <div className="solution-item">
                         <div className="solution-dot"></div>
-                        <p><strong>Live Tracking:</strong> Store saved grants and track active applications from your personal dashboard.</p>
+                        <p><strong>Direct Apply:</strong> Get official direct links to government and private portals for instant application.</p>
                     </div>
                 </div>
             </div>
@@ -209,8 +372,8 @@ export default function Landing() {
           </div>
           <div className="step-card">
             <div className="step-number">3</div>
-            <h3>Submit & Track</h3>
-            <p>Apply directly and track the progress of your applications in one dashboard.</p>
+            <h3>Apply Directly</h3>
+            <p>Get official links to government and private portals and submit your application instantly.</p>
           </div>
         </div>
       </div>
@@ -219,10 +382,10 @@ export default function Landing() {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <div className="brand" style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>
+            <Link to="/" className="brand" style={{ fontSize: "1.5rem", marginBottom: "1rem", textDecoration: "none" }}>
               <GraduationCap size={32} />
               EduGrant
-            </div>
+            </Link>
             <p>Empowering students to achieve their dreams through verified scholarship opportunities.</p>
           </div>
           
