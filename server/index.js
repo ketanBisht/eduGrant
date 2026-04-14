@@ -19,17 +19,30 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* -------------------- MIDDLEWARE -------------------- */
+const rawFrontendUrl = process.env.FRONTEND_URL || "";
+const sanitizedFrontendUrl = rawFrontendUrl.replace(/\/$/, ""); // Remove trailing slash
+
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3000",
-  process.env.FRONTEND_URL, // This will be your Vercel URL
+  sanitizedFrontendUrl,
 ].filter(Boolean);
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    // Check if origin matches or is a subdomain of sanitizedFrontendUrl
+    const isAllowed = allowedOrigins.some(allowed => {
+      const cleanAllowed = allowed.replace(/\/$/, "");
+      return origin === cleanAllowed;
+    });
+
+    if (isAllowed) {
       callback(null, true);
     } else {
+      console.warn(`[CORS Blocked]: Origin ${origin} is not in allowedOrigins:`, allowedOrigins);
       callback(new Error("Not allowed by CORS"));
     }
   },
