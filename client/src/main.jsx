@@ -16,6 +16,8 @@ if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }
 
+import ApiConfig from "./components/ApiConfig.jsx";
+
 function ClerkAppWrapper() {
   const { theme } = useTheme();
   
@@ -29,7 +31,9 @@ function ClerkAppWrapper() {
         }
       }}
     >
-      <App />
+      <ApiConfig>
+        <App />
+      </ApiConfig>
     </ClerkProvider>
   );
 }
