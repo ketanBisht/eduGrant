@@ -1,4 +1,4 @@
-import { Bell, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import "../styles/Layout.css";
 import { useUser, UserButton } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
@@ -26,11 +26,7 @@ export default function Navbar() {
           {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
         </button>
 
-        <button className="p-2 transition-colors relative nav-icon-btn">
-          <Bell size={20} />
-          {/* Notification dot */}
-          <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
-        </button>
+
 
         <div className="user-profile">
           <UserButton 

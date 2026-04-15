@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, TrendingUp, Users, Award, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen } from "lucide-react";
+import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen } from "lucide-react";
 import "../styles/Landing.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
@@ -52,9 +52,9 @@ export default function Landing() {
       {/* Navbar Stub for Landing */}
       <nav className="navbar" style={{ position: "relative" }}>
         <div className="navbar-start">
-          <Link to="/" className="brand" style={{ fontSize: "1.5rem", textDecoration: "none" }}>
-            <GraduationCap size={32} />
-            EduGrant
+          <Link to="/" className="brand" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
+            <img src="/edugrant.svg" alt="EduGrant Logo" style={{ width: "32px", height: "32px" }} />
+            <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "var(--text-main)" }}>EduGrant</span>
           </Link>
         </div>
         <div className="navbar-end" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -89,12 +89,12 @@ export default function Landing() {
 
       <SignedOut>
         <div className="hero">
-          <h1>Unlock Your Future with Education Grants</h1>
-          <p>
+          <h1 className="animate-slide-up">Unlock Your Future with Education Grants</h1>
+          <p className="animate-slide-up delay-1">
             Discover thousands of scholarship opportunities tailored to your profile. Streamline your
             application process and manage your saved opportunities in one place.
           </p>
-          <div className="cta-group">
+          <div className="cta-group animate-slide-up delay-2">
             <Link to="/register" className="btn btn-primary btn-hero">
               Get Started
             </Link>
@@ -108,7 +108,7 @@ export default function Landing() {
             </div>
             
             <div className="tracks-grid">
-                <div className="track-card">
+                <div className="track-card animate-slide-up delay-1">
                     <div className="track-icon girl">
                         <Target size={24} />
                     </div>
@@ -116,7 +116,7 @@ export default function Landing() {
                     <p>Exclusive grants for female students in STE(A)M and higher studies.</p>
                     <Link to="/register" className="track-link">View 400+ schemes <ArrowRight size={14} /></Link>
                 </div>
-                <div className="track-card">
+                <div className="track-card animate-slide-up delay-2">
                     <div className="track-icon merit">
                         <Zap size={24} />
                     </div>
@@ -124,7 +124,7 @@ export default function Landing() {
                     <p>Support for brilliant students from economically weaker sections.</p>
                     <Link to="/register" className="track-link">View 1.2k+ schemes <ArrowRight size={14} /></Link>
                 </div>
-                <div className="track-card">
+                <div className="track-card animate-slide-up delay-3">
                     <div className="track-icon govt">
                         <Shield size={24} />
                     </div>
@@ -132,7 +132,7 @@ export default function Landing() {
                     <p>Verified schemes from NSP, UGC, and State departments.</p>
                     <Link to="/register" className="track-link">View 800+ schemes <ArrowRight size={14} /></Link>
                 </div>
-                <div className="track-card">
+                <div className="track-card animate-slide-up delay-4">
                     <div className="track-icon private">
                         <BookOpen size={24} />
                     </div>
@@ -160,40 +160,14 @@ export default function Landing() {
         </div>
 
         {/* Impact Bar Moved Down */}
-        <div className="stats-bar-wrapper" style={{ margin: "4rem auto" }}>
-            <div className="stats-bar">
-                <div className="stat-pill">
-                    <Award className="text-primary" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">{(stats.count + 12000).toLocaleString()}+</span>
-                        <span className="stat-lbl">Active Schemes</span>
-                    </div>
-                </div>
-                <div className="stat-separator"></div>
-                <div className="stat-pill">
-                    <TrendingUp className="text-emerald-500" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">₹150Cr+</span>
-                        <span className="stat-lbl">Total Benefits</span>
-                    </div>
-                </div>
-                <div className="stat-separator"></div>
-                <div className="stat-pill">
-                    <Users className="text-blue-500" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">85%</span>
-                        <span className="stat-lbl">Success Rate</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+
       </SignedOut>
 
       <SignedIn>
         <div className="hero" style={{ maxWidth: "1200px" }}>
           <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-            <h1>Welcome back to EduGrant</h1>
-            <p>
+            <h1 className="animate-slide-up">Welcome back to EduGrant</h1>
+            <p className="animate-slide-up delay-1">
               Your curated hub for educational opportunities. Explore matches tailored to your verified profile.
             </p>
           </div>
@@ -202,7 +176,7 @@ export default function Landing() {
         {/* Action Grid */}
         <section className="featured-section" style={{ paddingTop: '2rem' }}>
             <div className="tracks-grid">
-                <Link to="/scholarships" className="track-card">
+                <Link to="/scholarships" className="track-card animate-slide-up delay-1">
                     <div className="track-icon girl">
                         <Search size={24} />
                     </div>
@@ -210,7 +184,7 @@ export default function Landing() {
                     <p>Search and filter through the entire database of active scholarships.</p>
                     <span className="track-link">Browse All <ArrowRight size={14} /></span>
                 </Link>
-                <Link to="/dashboard" className="track-card">
+                <Link to="/dashboard" className="track-card animate-slide-up delay-2">
                     <div className="track-icon merit">
                         <LayoutDashboard size={24} />
                     </div>
@@ -218,7 +192,7 @@ export default function Landing() {
                     <p>Track your saved applications, deadlines, and smart matches.</p>
                     <span className="track-link">Go to Dashboard <ArrowRight size={14} /></span>
                 </Link>
-                <Link to="/profile-builder" className="track-card">
+                <Link to="/profile-builder" className="track-card animate-slide-up delay-3">
                     <div className="track-icon govt">
                         <FileCheck size={24} />
                     </div>
@@ -246,33 +220,7 @@ export default function Landing() {
         </div>
 
         {/* Impact Bar Moved Down */}
-        <div className="stats-bar-wrapper" style={{ margin: "4rem auto" }}>
-            <div className="stats-bar">
-                <div className="stat-pill">
-                    <Award className="text-primary" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">{(stats.count + 12000).toLocaleString()}+</span>
-                        <span className="stat-lbl">Active Schemes</span>
-                    </div>
-                </div>
-                <div className="stat-separator"></div>
-                <div className="stat-pill">
-                    <TrendingUp className="text-emerald-500" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">₹150Cr+</span>
-                        <span className="stat-lbl">Total Benefits</span>
-                    </div>
-                </div>
-                <div className="stat-separator"></div>
-                <div className="stat-pill">
-                    <Users className="text-blue-500" size={24} />
-                    <div className="stat-text">
-                        <span className="stat-num">Verified</span>
-                        <span className="stat-lbl">Official Data</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+
 
       </SignedIn>
 
@@ -284,7 +232,7 @@ export default function Landing() {
         </div>
 
         <div className="features-grid">
-          <div className="feature-card">
+          <div className="feature-card animate-slide-up delay-1">
             <div className="feature-icon">
               <Search size={32} />
             </div>
@@ -295,7 +243,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="feature-card">
+          <div className="feature-card animate-slide-up delay-2">
             <div
               className="feature-icon"
               style={{ color: "var(--secondary)", backgroundColor: "var(--bg-secondary-muted)" }}
@@ -308,7 +256,7 @@ export default function Landing() {
             </p>
           </div>
 
-          <div className="feature-card">
+          <div className="feature-card animate-slide-up delay-3">
             <div
               className="feature-icon"
               style={{ color: "var(--warning)", backgroundColor: "var(--bg-warning-muted)" }}
@@ -323,7 +271,7 @@ export default function Landing() {
         </div>
 
         {/* New Problem vs Solution Section */}
-        <div className="challenge-section">
+        <div className="challenge-section animate-slide-up delay-2">
             <div className="challenge-grid">
                 <div className="challenge-text">
                     <h2 className="text-3xl font-bold mb-6">Bridging the Opportunity Gap</h2>
@@ -360,17 +308,17 @@ export default function Landing() {
       <div className="how-it-works">
         <h2 className="section-title">Get Started in 3 Simple Steps</h2>
         <div className="steps-grid">
-          <div className="step-card">
+          <div className="step-card animate-slide-up delay-1">
             <div className="step-number">1</div>
             <h3>Create Profile</h3>
             <p>Sign up and complete your academic profile to unlock matching grants.</p>
           </div>
-          <div className="step-card">
+          <div className="step-card animate-slide-up delay-2">
             <div className="step-number">2</div>
             <h3>Find Your Match</h3>
             <p>Our smart engine filters thousands of scholarships to find yours.</p>
           </div>
-          <div className="step-card">
+          <div className="step-card animate-slide-up delay-3">
             <div className="step-number">3</div>
             <h3>Apply Directly</h3>
             <p>Get official links to government and private portals and submit your application instantly.</p>
@@ -382,9 +330,9 @@ export default function Landing() {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-brand">
-            <Link to="/" className="brand" style={{ fontSize: "1.5rem", marginBottom: "1rem", textDecoration: "none" }}>
-              <GraduationCap size={32} />
-              EduGrant
+            <Link to="/" className="brand" style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1rem", textDecoration: "none" }}>
+              <img src="/edugrant.svg" alt="EduGrant Logo" style={{ width: "32px", height: "32px" }} />
+              <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "var(--text-main)" }}>EduGrant</span>
             </Link>
             <p>Empowering students to achieve their dreams through verified scholarship opportunities.</p>
           </div>
@@ -399,7 +347,7 @@ export default function Landing() {
           <div className="footer-contact">
             <h4>Support & Contact</h4>
             <p>Email: edugrantsupport@gmail.com</p>
-            <p>Direct: +91 97297 XXXXX</p>
+            <p>Direct: +91 97297 095XX</p>
             <p>Hours: Mon - Fri, 9 AM - 6 PM</p>
           </div>
         </div>

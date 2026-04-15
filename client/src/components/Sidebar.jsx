@@ -1,4 +1,4 @@
-import { LayoutDashboard, GraduationCap, FileText, Settings, LogOut, ShieldCheck, FolderOpen, Home } from "lucide-react";
+import { LayoutDashboard, GraduationCap, FileText, LogOut, ShieldCheck, FolderOpen, Home } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import "../styles/Layout.css";
@@ -27,7 +27,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="sidebar-header">
         <Link to="/" className="brand">
-          <GraduationCap className="w-8 h-8 text-primary" />
+          <img src="/edugrant.svg" alt="EduGrant Logo" className="w-8 h-8" style={{ width: '32px', height: '32px' }} />
           <span>EduGrant</span>
         </Link>
       </div>
@@ -50,10 +50,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <Link to="/settings" className="nav-item">
-          <Settings size={20} />
-          <span>Settings</span>
-        </Link>
+
         <button onClick={() => signOut()} className="nav-item w-full text-left">
           <LogOut size={20} />
           <span>Logout</span>

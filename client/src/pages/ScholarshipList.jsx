@@ -195,17 +195,35 @@ export default function ScholarshipList() {
                     id="filter-toggle-btn"
                     type="button"
                     onClick={() => setShowFilters(prev => !prev)}
-                    className="filter-select flex items-center gap-2 shrink-0"
-                    style={{ background: activeFilterCount > 0 ? 'rgba(16,185,129,0.15)' : undefined, borderColor: activeFilterCount > 0 ? 'var(--primary)' : undefined, color: activeFilterCount > 0 ? 'var(--primary)' : 'var(--text-main)' }}
+                    className="filter-select flex items-center shrink-0"
+                    style={{ 
+                        gap: '0.75rem',
+                        background: activeFilterCount > 0 ? 'rgba(16,185,129,0.15)' : undefined, 
+                        borderColor: activeFilterCount > 0 ? 'var(--primary)' : undefined, 
+                        color: activeFilterCount > 0 ? 'var(--primary)' : 'var(--text-main)',
+                        padding: '0 1.25rem'
+                    }}
                 >
                     <SlidersHorizontal size={16} />
-                    Filters
+                    <span className="font-bold">Filters</span>
                     {activeFilterCount > 0 && (
-                        <span style={{ background: 'var(--primary)', color: 'var(--bg-main)', borderRadius: '100px', padding: '1px 7px', fontSize: '0.7rem', fontWeight: 900 }}>
+                        <span style={{ 
+                            background: 'var(--primary)', 
+                            color: '#fff', 
+                            borderRadius: '100px', 
+                            padding: '2px 8px', 
+                            fontSize: '0.75rem', 
+                            fontWeight: 900,
+                            lineHeight: '1',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            minWidth: '20px'
+                        }}>
                             {activeFilterCount}
                         </span>
                     )}
-                    <ChevronDown size={14} style={{ transform: showFilters ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+                    <ChevronDown size={14} style={{ transform: showFilters ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', opacity: 0.6 }} />
                 </button>
             </div>
             )}
@@ -273,9 +291,10 @@ export default function ScholarshipList() {
                                 id="clear-filters-btn"
                                 type="button"
                                 onClick={clearAll}
-                                className="flex items-center gap-2 text-red-500 hover:text-red-600 font-bold text-sm transition-colors"
+                                className="flex items-center gap-2 font-bold text-sm transition-all hover:opacity-80"
+                                style={{ color: '#ef4444' }} // Explicit hex for red-500 to ensure visibility
                             >
-                                <X size={16} /> Clear All Filters
+                                <X size={16} strokeWidth={3} /> Clear All Filters
                             </button>
                         </div>
                     )}
@@ -284,7 +303,14 @@ export default function ScholarshipList() {
 
             {/* Active Filter Chips */}
             {!view && activeFilterCount > 0 && (
-                <div className="flex flex-wrap gap-2" style={{ marginTop: '1.5rem', marginBottom: '2rem' }}>
+                <div 
+                    className="flex flex-wrap" 
+                    style={{ 
+                        marginTop: '2rem', 
+                        marginBottom: '2.5rem',
+                        gap: '12px' 
+                    }}
+                >
                     {filters.source && <FilterChip label={filters.source.replace('_', ' ')} onRemove={() => handleFilterChange('source', '')} />}
                     {filters.category && <FilterChip label={`Caste: ${filters.category}`} onRemove={() => handleFilterChange('category', '')} />}
                     {filters.state && <FilterChip label={filters.state} onRemove={() => handleFilterChange('state', '')} />}
@@ -358,10 +384,40 @@ export default function ScholarshipList() {
 
 function FilterChip({ label, onRemove }) {
     return (
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-primary border border-primary/30 bg-primary/10">
-            {label}
-            <button type="button" onClick={onRemove} className="hover:text-white transition-colors">
-                <X size={12} />
+        <span 
+            className="inline-flex items-center transition-all hover:scale-105"
+            style={{ 
+                gap: '10px',
+                padding: '8px 16px',
+                borderRadius: '12px',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                background: 'var(--surface)',
+                color: 'var(--primary)',
+                border: '1px solid var(--primary)',
+                boxShadow: '0 4px 12px -4px rgba(16, 185, 129, 0.2)',
+                cursor: 'default',
+                display: 'inline-flex',
+                alignItems: 'center'
+            }}
+        >
+            <span style={{ textTransform: 'capitalize' }}>{label.toLowerCase()}</span>
+            <button 
+                type="button" 
+                onClick={onRemove} 
+                className="hover:rotate-90 transition-transform p-0.5 rounded-full hover:bg-primary/20"
+                style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    color: 'var(--primary)', // Explicitly set color for visibility
+                    background: 'transparent',
+                    border: 'none',
+                    padding: '2px'
+                }}
+                aria-label={`Remove ${label} filter`}
+            >
+                <X size={14} strokeWidth={3} />
             </button>
         </span>
     );
