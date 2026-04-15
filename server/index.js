@@ -78,6 +78,15 @@ app.get("/protected", requireAuth(), async (req, res) => {
   });
 });
 
+// 404 Catch-all for Debugging
+app.use((req, res) => {
+  console.warn(`[404 Not Found]: ${req.method} ${req.url} - Origin: ${req.get('origin')}`);
+  res.status(404).json({
+    success: false,
+    message: `Route ${req.method} ${req.url} not found on this server.`
+  });
+});
+
 /* -------------------- SERVER -------------------- */
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`
