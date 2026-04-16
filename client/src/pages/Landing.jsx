@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
-import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen } from "lucide-react";
+import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen, Menu, X } from "lucide-react";
 import "../styles/Landing.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
@@ -11,6 +11,7 @@ export default function Landing() {
            localStorage.getItem("theme") === "dark";
   });
   
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState({ count: 0, totalAmount: 0 });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,6 +47,7 @@ export default function Landing() {
   }, [isDark]);
 
   const toggleTheme = () => setIsDark(!isDark);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
     <div className="landing-page">
@@ -57,26 +59,27 @@ export default function Landing() {
             <span style={{ fontSize: "1.5rem", fontWeight: "bold", color: "var(--text-main)" }}>EduGrant</span>
           </Link>
         </div>
-        <div className="navbar-end" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+
+        <div className="navbar-mobile-toggle" onClick={toggleMobileMenu}>
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </div>
+
+        <div className={`navbar-end ${isMobileMenuOpen ? 'mobile-show' : ''}`} style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button 
             onClick={toggleTheme} 
+            className="theme-toggle"
             style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.5rem", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", color: "var(--text-main)" }}
             aria-label="Toggle theme"
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
-          {/* <Link to="/login" className="btn text-slate-600 hover:text-primary font-medium">
-            Log In
-          </Link>
-          <Link to="/register" className="btn btn-primary">
-            Sign Up
-          </Link> */}
+          
           <SignedOut>
-            <Link to="/login" className="btn btn-secondary font-medium">
+            <Link to="/login" className="btn btn-secondary font-medium" onClick={() => setIsMobileMenuOpen(false)}>
               Log In
             </Link>
 
-            <Link to="/register" className="btn btn-primary">
+            <Link to="/register" className="btn btn-primary" onClick={() => setIsMobileMenuOpen(false)}>
               Sign Up
             </Link>
           </SignedOut>
@@ -91,7 +94,7 @@ export default function Landing() {
         <div className="hero">
           <h1 className="animate-slide-up">Unlock Your Future with Education Grants</h1>
           <p className="animate-slide-up delay-1">
-            Discover thousands of scholarship opportunities tailored to your profile. Streamline your
+            Discover scholarship opportunities tailored to your profile. Streamline your
             application process and manage your saved opportunities in one place.
           </p>
           <div className="cta-group animate-slide-up delay-2">
@@ -108,21 +111,14 @@ export default function Landing() {
             </div>
             
             <div className="tracks-grid">
-                <div className="track-card animate-slide-up delay-1">
-                    <div className="track-icon girl">
-                        <Target size={24} />
-                    </div>
-                    <h4>Girls Education</h4>
-                    <p>Exclusive grants for female students in STE(A)M and higher studies.</p>
-                    <Link to="/register" className="track-link">View 400+ schemes <ArrowRight size={14} /></Link>
-                </div>
+
                 <div className="track-card animate-slide-up delay-2">
                     <div className="track-icon merit">
                         <Zap size={24} />
                     </div>
                     <h4>Merit Cum Means</h4>
                     <p>Support for brilliant students from economically weaker sections.</p>
-                    <Link to="/register" className="track-link">View 1.2k+ schemes <ArrowRight size={14} /></Link>
+                    <Link to="/register" className="track-link">View schemes <ArrowRight size={14} /></Link>
                 </div>
                 <div className="track-card animate-slide-up delay-3">
                     <div className="track-icon govt">
@@ -130,7 +126,7 @@ export default function Landing() {
                     </div>
                     <h4>Central Govt</h4>
                     <p>Verified schemes from NSP, UGC, and State departments.</p>
-                    <Link to="/register" className="track-link">View 800+ schemes <ArrowRight size={14} /></Link>
+                    <Link to="/register" className="track-link">View schemes <ArrowRight size={14} /></Link>
                 </div>
                 <div className="track-card animate-slide-up delay-4">
                     <div className="track-icon private">
@@ -138,7 +134,7 @@ export default function Landing() {
                     </div>
                     <h4>Private CSR</h4>
                     <p>Grants from TATA, Reliance, and other corporate foundations.</p>
-                    <Link to="/register" className="track-link">View 500+ schemes <ArrowRight size={14} /></Link>
+                    <Link to="/register" className="track-link">View schemes <ArrowRight size={14} /></Link>
                 </div>
             </div>
         </section>
@@ -176,21 +172,21 @@ export default function Landing() {
         {/* Action Grid */}
         <section className="featured-section" style={{ paddingTop: '2rem' }}>
             <div className="tracks-grid">
-                <Link to="/scholarships" className="track-card animate-slide-up delay-1">
-                    <div className="track-icon girl">
-                        <Search size={24} />
-                    </div>
-                    <h4>Discovery Hub</h4>
-                    <p>Search and filter through the entire database of active scholarships.</p>
-                    <span className="track-link">Browse All <ArrowRight size={14} /></span>
-                </Link>
-                <Link to="/dashboard" className="track-card animate-slide-up delay-2">
+                <Link to="/dashboard" className="track-card animate-slide-up delay-1">
                     <div className="track-icon merit">
                         <LayoutDashboard size={24} />
                     </div>
                     <h4>My Dashboard</h4>
                     <p>Track your saved applications, deadlines, and smart matches.</p>
                     <span className="track-link">Go to Dashboard <ArrowRight size={14} /></span>
+                </Link>
+                <Link to="/scholarships" className="track-card animate-slide-up delay-2">
+                    <div className="track-icon girl">
+                        <Search size={24} />
+                    </div>
+                    <h4>Discovery Hub</h4>
+                    <p>Search and filter through the entire database of active scholarships.</p>
+                    <span className="track-link">Browse All <ArrowRight size={14} /></span>
                 </Link>
                 <Link to="/profile-builder" className="track-card animate-slide-up delay-3">
                     <div className="track-icon govt">
@@ -276,10 +272,10 @@ export default function Landing() {
                 <div className="challenge-text">
                     <h2 className="text-3xl font-bold mb-6">Bridging the Opportunity Gap</h2>
                     <p className="mb-4">
-                        Did you know that over <strong>65% of eligible students</strong> miss out on funding simply because they couldn't find it in time? The scholarship journey is currently broken:
+                        Did you know that many eligible students miss out on funding simply because they couldn't find it in time? The scholarship journey is currently broken:
                     </p>
                     <ul className="problem-list">
-                        <li><strong>❌ Fragmented Data:</strong> Opportunities are scattered across 500+ private and government portals.</li>
+                        <li><strong>❌ Fragmented Data:</strong> Opportunities are scattered across numerous private and government portals.</li>
                         <li><strong>❌ Complex Eligibility:</strong> Complex criteria make it hard to know if you're actually eligible.</li>
                         <li><strong>❌ Missed Deadlines:</strong> Manually tracking dates leads to missed chances for career-changing funds.</li>
                     </ul>
@@ -306,7 +302,7 @@ export default function Landing() {
 
       {/* How it Works Section */}
       <div className="how-it-works">
-        <h2 className="section-title">Get Started in 3 Simple Steps</h2>
+        <h2 className="section-title">Get Started in Simple Steps</h2>
         <div className="steps-grid">
           <div className="step-card animate-slide-up delay-1">
             <div className="step-number">1</div>
@@ -316,7 +312,7 @@ export default function Landing() {
           <div className="step-card animate-slide-up delay-2">
             <div className="step-number">2</div>
             <h3>Find Your Match</h3>
-            <p>Our smart engine filters thousands of scholarships to find yours.</p>
+            <p>Our smart engine filters scholarships to find yours.</p>
           </div>
           <div className="step-card animate-slide-up delay-3">
             <div className="step-number">3</div>

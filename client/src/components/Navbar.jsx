@@ -1,10 +1,10 @@
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Menu } from "lucide-react";
 import "../styles/Layout.css";
 import { useUser, UserButton } from "@clerk/clerk-react";
 import { dark } from "@clerk/themes";
 import { useTheme } from "../context/ThemeContext";
 
-export default function Navbar() {
+export default function Navbar({ onMenuClick }) {
   const { user, isLoaded } = useUser();
   const { theme, toggleTheme } = useTheme();
 
@@ -13,6 +13,9 @@ export default function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-start">
+        <button className="mobile-toggle" onClick={onMenuClick}>
+          <Menu size={24} />
+        </button>
         {/* Breadcrumb or Page Title can go here */}
         <h1>Overview</h1>
       </div>

@@ -3,16 +3,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
 import '../styles/Layout.css';
+import { useState } from 'react';
 
 export default function DashboardLayout() {
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+    const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
     return (
-        <div className="dashboard-layout">
-            <Sidebar />
+        <div className={`dashboard-layout ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
+            <Sidebar isOpen={isMobileMenuOpen} onClose={closeMobileMenu} />
             <div className="main-content">
-                <Navbar />
-                <main className="page-container">
+                <Navbar onMenuClick={toggleMobileMenu} />
+                <main className="page-container" onClick={closeMobileMenu}>
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={location.pathname}

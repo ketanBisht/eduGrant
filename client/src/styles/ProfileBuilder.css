@@ -91,15 +91,32 @@
 }
 
 .pb-step-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
     margin: 6px 8px 0;
     display: block;
     text-align: center;
     min-width: 60px;
+}
+
+@media (max-width: 640px) {
+    .pb-step-line {
+        width: 24px;
+        margin-bottom: 12px;
+    }
+    .pb-step-label {
+        font-size: 0.6rem;
+        min-width: 40px;
+        display: none; /* Hide labels on very small screens to save space */
+    }
+    .pb-step-label-active {
+        display: block;
+        position: absolute;
+        bottom: -20px;
+        width: 100px;
+    }
+    .pb-steps {
+        position: relative;
+        margin-bottom: 3rem;
+    }
 }
 
 .pb-step-label-active {
@@ -299,18 +316,16 @@
     gap: 2px;
 }
 
-.pb-summary-key {
-    font-size: 0.65rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-secondary);
-}
-
 .pb-summary-val {
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-main);
+}
+
+@media (max-width: 480px) {
+    .pb-summary-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ---- Navigation ---- */

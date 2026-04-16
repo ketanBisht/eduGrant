@@ -1,9 +1,9 @@
-import { LayoutDashboard, GraduationCap, FileText, LogOut, ShieldCheck, FolderOpen, Home } from "lucide-react";
+import { LayoutDashboard, GraduationCap, FileText, LogOut, ShieldCheck, FolderOpen, Home, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import "../styles/Layout.css";
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
   const { user } = useUser();
   const { signOut } = useClerk();
   const location = useLocation();
@@ -24,12 +24,15 @@ export default function Sidebar() {
   }
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
         <Link to="/" className="brand">
           <img src="/edugrant.svg" alt="EduGrant Logo" className="w-8 h-8" style={{ width: '32px', height: '32px' }} />
           <span>EduGrant</span>
         </Link>
+        <button className="mobile-close" onClick={onClose}>
+          <X size={24} />
+        </button>
       </div>
 
       <nav className="sidebar-nav">

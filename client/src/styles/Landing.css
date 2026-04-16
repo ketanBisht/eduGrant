@@ -2,6 +2,21 @@
 .landing-page {
     background: var(--background);
     min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.landing-page .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2.5rem;
+    z-index: 1000;
+}
+
+.navbar-mobile-toggle {
+    display: none;
+    cursor: pointer;
+    color: var(--text-main);
 }
 
 @keyframes slideUp {
@@ -304,22 +319,98 @@
 }
 
 @media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
+    .landing-page .navbar {
+        padding: 1rem 1.5rem;
     }
-    
+
+    .navbar-mobile-toggle {
+        display: block;
+    }
+
+    .landing-page .navbar-end {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--surface);
+        flex-direction: column;
+        padding: 4rem 2rem;
+        gap: 2rem !important;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+        display: none !important;
+        z-index: 40;
+    }
+
+    .landing-page .navbar-end.mobile-show {
+        display: flex !important;
+        transform: translateY(0);
+    }
+
+    .hero {
+        padding: 6rem 1.5rem 0.5rem 1.5rem;
+    }
+
+    .hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 1rem;
+    }
+
+    .btn-hero {
+        width: 100%;
+        text-align: center;
+    }
+
+    .features-grid, .steps-grid, .tracks-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
     .challenge-grid {
         grid-template-columns: 1fr;
         gap: 2.5rem;
     }
 
     .challenge-section {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .solution-card {
         padding: 2rem;
     }
 
     .footer-content {
         grid-template-columns: 1fr;
         gap: 2.5rem;
+    }
+
+    .stats-bar {
+        border-radius: 20px;
+        padding: 1.5rem;
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+
+    .stat-pill {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stat-separator {
+        width: 100%;
+        height: 1px;
     }
 }
 
