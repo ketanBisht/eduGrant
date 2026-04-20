@@ -48,7 +48,7 @@
         width: 100% !important;
     }
 
-    .filter-grid-mobile {
+    .filters-grid-container {
         display: grid;
         grid-template-columns: 1fr !important;
         gap: 1.25rem !important;
@@ -571,6 +571,13 @@
 /* ==============================
    Rich Filter System Extensions
    ============================== */
+
+.filters-grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    align-items: flex-end;
+}
 
 .filter-select.w-full {
     width: 100%;

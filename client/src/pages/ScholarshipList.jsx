@@ -231,7 +231,7 @@ export default function ScholarshipList() {
             {/* Expanded Filter Panel */}
             {showFilters && (
                 <div className="glass-card filter-panel-expanded" style={{ padding: '2rem 1.5rem', marginBottom: '2rem' }}>
-                    <div className="filter-grid-mobile">
+                    <div className="filters-grid-container">
                         {/* Source */}
                         <div>
                             <label className="block text-xs font-bold uppercase tracking-widest text-text-muted mb-2">Source</label>

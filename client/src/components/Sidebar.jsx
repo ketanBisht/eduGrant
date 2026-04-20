@@ -26,7 +26,7 @@ export default function Sidebar({ isOpen, onClose }) {
   return (
     <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-header">
-        <Link to="/" className="brand">
+        <Link to="/" className="brand" onClick={onClose}>
           <img src="/edugrant.svg" alt="EduGrant Logo" className="w-8 h-8" style={{ width: '32px', height: '32px' }} />
           <span>EduGrant</span>
         </Link>
@@ -44,6 +44,7 @@ export default function Sidebar({ isOpen, onClose }) {
               key={item.path}
               to={item.path}
               className={`nav-item ${isActive ? "active" : ""}`}
+              onClick={onClose}
             >
               <Icon size={20} />
               <span>{item.label}</span>
@@ -54,7 +55,7 @@ export default function Sidebar({ isOpen, onClose }) {
 
       <div className="sidebar-footer">
 
-        <button onClick={() => signOut()} className="nav-item w-full text-left">
+        <button onClick={() => { signOut(); onClose(); }} className="nav-item w-full text-left">
           <LogOut size={20} />
           <span>Logout</span>
         </button>

@@ -4,12 +4,10 @@ import api from "../api";
 import { GraduationCap, Search, FileCheck, Shield, Sun, Moon, ArrowRight, Zap, Target, BookOpen, LayoutDashboard, FolderOpen, Menu, X } from "lucide-react";
 import "../styles/Landing.css";
 import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Landing() {
-  const [isDark, setIsDark] = useState(() => {
-    return document.documentElement.classList.contains("dark") || 
-           localStorage.getItem("theme") === "dark";
-  });
+  const { theme, toggleTheme } = useTheme();
   
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState({ count: 0, totalAmount: 0 });
@@ -36,17 +34,6 @@ export default function Landing() {
     fetchLandingData();
   }, []);
 
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
-
-  const toggleTheme = () => setIsDark(!isDark);
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   return (
@@ -60,6 +47,27 @@ export default function Landing() {
           </Link>
         </div>
 
+        {/* Mobile-only Actions */}
+        <div className="navbar-mobile-actions">
+          <button 
+            onClick={toggleTheme} 
+            className="theme-toggle"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          
+          <SignedOut>
+            <Link to="/login" className="btn btn-primary btn-mobile-auth">
+              Log In/Sign Up
+            </Link>
+          </SignedOut>
+
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+
         <div className="navbar-mobile-toggle" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </div>
@@ -67,11 +75,11 @@ export default function Landing() {
         <div className={`navbar-end ${isMobileMenuOpen ? 'mobile-show' : ''}`} style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button 
             onClick={toggleTheme} 
-            className="theme-toggle"
+            className="theme-toggle theme-toggle-desktop"
             style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0.5rem", borderRadius: "50%", background: "transparent", border: "1px solid var(--border)", cursor: "pointer", color: "var(--text-main)" }}
             aria-label="Toggle theme"
           >
-            {isDark ? <Sun size={20} /> : <Moon size={20} />}
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           
           <SignedOut>

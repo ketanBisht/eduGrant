@@ -68,17 +68,19 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
         }
     };
 
+    const toggleExpand = () => setIsHovered(!isHovered);
+
     return (
         <motion.div
-            className="scholarship-card list-style"
+            className={`scholarship-card list-style ${isHovered ? 'expanded' : ''}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onClick={toggleExpand}
             transition={{ duration: 0.4 }}
             style={{ 
                 height: isHovered ? 'auto' : '100px',
-                padding: isHovered ? '2rem' : '1.5rem 2rem'
+                padding: isHovered ? '2rem' : '1.5rem 2rem',
+                cursor: 'pointer'
             }}
         >
             {/* Deadline urgency bar at top */}
@@ -145,13 +147,18 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
                 >
                     <button 
                         className={`icon-btn hover:bg-black/5 dark:hover:bg-white/5 ${isSaved ? 'text-primary' : ''}`} 
-                        onClick={handleSave}
+                        onClick={(e) => { e.stopPropagation(); handleSave(e); }}
                         disabled={saving}
                         style={{ width: '40px', height: '40px' }}
                     >
                         <Bookmark size={16} fill={isSaved ? "currentColor" : "none"} />
                     </button>
-                    <Link to={scholarship.id ? `/scholarships/${scholarship.id}` : '#'} className="apply-btn" style={{ height: '40px', padding: '0 1.25rem', fontSize: '0.9rem' }}>
+                    <Link 
+                        to={scholarship.id ? `/scholarships/${scholarship.id}` : '#'} 
+                        className="apply-btn" 
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ height: '40px', padding: '0 1.25rem', fontSize: '0.9rem' }}
+                    >
                         <span>View</span>
                         <ChevronRight size={14}/>
                     </Link>

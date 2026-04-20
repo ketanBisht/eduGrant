@@ -17,7 +17,6 @@ export default function Navbar({ onMenuClick }) {
           <Menu size={24} />
         </button>
         {/* Breadcrumb or Page Title can go here */}
-        <h1>Overview</h1>
       </div>
 
       <div className="navbar-end">
