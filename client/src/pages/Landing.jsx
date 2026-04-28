@@ -351,7 +351,7 @@ export default function Landing() {
           <div className="footer-contact">
             <h4>Support & Contact</h4>
             <p>Email: edugrantsupport@gmail.com</p>
-            <p>Direct: +91 97297 095XX</p>
+            <p>Direct: +91 97297 09542</p>
             <p>Hours: Mon - Fri, 9 AM - 6 PM</p>
           </div>
         </div>

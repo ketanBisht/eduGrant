@@ -14,6 +14,7 @@ import vaultRoutes from "./routes/vaultRoutes.js";
 import studentRoutes from "./routes/studentRoutes.js";
 import savedRoutes from "./routes/savedRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import { initCronJobs } from "./services/cronService.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -94,6 +95,9 @@ EduGrant API is Live 🚀
 Mode: ${process.env.NODE_ENV || 'development'}
 Port: ${PORT}
   `);
+  
+  // Initialize background tasks
+  initCronJobs();
 });
 
 

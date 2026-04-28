@@ -1,4 +1,4 @@
-import { LayoutDashboard, GraduationCap, FileText, LogOut, ShieldCheck, FolderOpen, Home, X } from "lucide-react";
+import { LayoutDashboard, GraduationCap, FileText, LogOut, ShieldCheck, Home, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useUser, useClerk } from "@clerk/clerk-react";
 import "../styles/Layout.css";
@@ -13,7 +13,6 @@ export default function Sidebar({ isOpen, onClose }) {
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "Scholarships", path: "/scholarships", icon: GraduationCap },
     { label: "Profile Builder", path: "/profile-builder", icon: FileText },
-    { label: "Document Vault", path: "/vault", icon: FolderOpen },
   ];
 
   const role = user?.publicMetadata?.role || "student";

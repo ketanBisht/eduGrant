@@ -68,14 +68,26 @@ export default function ScholarshipCard({ scholarship, isInitiallySaved = false 
         }
     };
 
-    const toggleExpand = () => setIsHovered(!isHovered);
+    const handleMouseEnter = () => {
+        if (window.innerWidth >= 768) setIsHovered(true);
+    };
+    
+    const handleMouseLeave = () => {
+        if (window.innerWidth >= 768) setIsHovered(false);
+    };
+
+    const handleClick = () => {
+        if (window.innerWidth < 768) setIsHovered(!isHovered);
+    };
 
     return (
         <motion.div
             className={`scholarship-card list-style ${isHovered ? 'expanded' : ''}`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            onClick={toggleExpand}
+            onClick={handleClick}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             transition={{ duration: 0.4 }}
             style={{ 
                 height: isHovered ? 'auto' : '100px',
